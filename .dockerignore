@@ -1,0 +1,7 @@
+.git
+.gitignore
+cloudflared.exe
+*.exe
+*.bat
+*.ps1
+reunion_central_bombas_utf8.txt

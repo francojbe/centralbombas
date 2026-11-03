@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demostrador Central Bombas SpA | OT Terreno Offline + Conector Defontana ERP</title>
+    <meta name="robots" content="noindex, nofollow">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .font-mono-tech {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Phone Mockup Frame */
+        .phone-frame {
+            width: 100%;
+            max-width: 410px;
+            border: 8px solid #cbd5e1;
+            border-radius: 36px;
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            position: relative;
+        }
+        .phone-notch {
+            width: 120px;
+            height: 20px;
+            background: #94a3b8;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            margin: 0 auto;
+        }
+        canvas#sigCanvas {
+            touch-action: none;
+            cursor: crosshair;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.02); }
+        }
+        .pulse-subtle {
+            animation: pulseGlow 2.5s infinite ease-in-out;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; color: black !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-white">
+
+    <!-- =========================================================================
+         TOP EXECUTIVE BANNER: CENTRAL BOMBAS SpA
+         ========================================================================= -->
+    <header class="no-print bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Brand Badge with Official Logo -->
+            <div class="flex items-center gap-3">
+                <img src="logo_centralbombas.png" alt="Central Bombas SpA" class="h-10 max-w-[200px] object-contain">
+                <div class="border-l border-slate-200 pl-3">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-sky-50 text-[#00639e] border border-sky-200">
+                            DEMO OFICIAL TERRENO
+                        </span>
+                        <span class="text-xs font-bold text-slate-700">Sepúlveda Leyton 3068, Santiago</span>
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        Pautas en Terreno Offline · Conector Nativo Defontana ERP · Certificados Formales
+                    </p>
+                </div>
+            </div>
+
+            <!-- Preset Selector (Real Santiago Buildings) -->
+            <div class="flex items-center gap-2 bg-slate-900 p-1.5 rounded-xl border border-slate-800 text-xs">
+                <span class="text-slate-400 font-semibold px-2 hidden md:inline">Edificio:</span>
+                <button id="btnPreset1" onclick="loadBuildingPreset('los_leones')" class="px-3 py-1.5 rounded-lg font-semibold transition bg-cyan-600 text-white shadow">
+                    <svg class="w-3.5 h-3.5 text-[#00639e] inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/></svg>Torre Los Leones (Providencia)
+                </button>
+                <button id="btnPreset2" onclick="loadBuildingPreset('nunoa')" class="px-3 py-1.5 rounded-lg font-semibold transition text-slate-300 hover:text-white hover:bg-slate-800">
+                    <svg class="w-3.5 h-3.5 text-rose-400 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><line x1="12" x2="12" y1="8" y2="12" stroke-width="2"/><line x1="12" x2="12.01" y1="16" stroke-width="2"/></svg>Sentina Plaza Ñuñoa (Urgencia)
+                </button>
+                <button id="btnPreset3" onclick="loadBuildingPreset('capital')" class="px-3 py-1.5 rounded-lg font-semibold transition text-slate-300 hover:text-white hover:bg-slate-800">
+                    <svg class="w-3.5 h-3.5 text-amber-400 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>Edificio Capital (Santiago Centro)
+                </button>
+            </div>
+
+            <!-- Signal Simulator Pill & Mobile App Button -->
+            <div class="flex items-center gap-2">
+                <a href="app-tecnico-centralbombas.html" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition bg-gradient-to-r from-[#00639e] to-[#0284c7] hover:from-[#005282] hover:to-[#0274b0] text-white shadow shadow-cyan-900/40">
+                    <svg class="w-3.5 h-3.5 text-white inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" stroke-width="2"/><line x1="12" x2="12.01" y1="18" y2="18" stroke-width="2"/></svg>
+                    <span>Abrir App Móvil (Celular)</span>
+                </a>
+                <button id="btnSignalToggle" onclick="toggleSignalSimulation()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-mono-tech font-bold transition border border-rose-500/40 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20">
+                    <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                    <span id="signalStatusLabel">Subterráneo -3 (Offline)</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- =========================================================================
+         MAIN APPLICATION WORKSPACE
+         ========================================================================= -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
+        
+        <!-- Context Alert / Pitch Highlight -->
+        <div class="no-print mb-6 p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="text-[#00639e] font-bold text-xs uppercase tracking-wider font-mono-tech">Arquitectura Validada para Salas de Bombas</span>
+                    <span class="text-slate-300 text-xs">·</span>
+                    <span class="text-emerald-700 font-bold text-xs bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">100% Funcional Offline & Respaldo SLA</span>
+                </div>
+                <h1 class="text-lg md:text-xl font-black text-slate-900 mt-1.5">
+                    Control de Cuadrillas en Subterráneos, Firma Digital & Enlace Inmediato a Facturación
+                </h1>
+                <p class="text-xs text-slate-600 mt-1 max-w-3xl leading-relaxed">
+                    Diseñado específicamente para técnicos de <strong>Central Bombas SpA</strong> que bajan al nivel -2, -3 o -4 sin internet. Captura presiones hidráulicas (bar), amperajes por bomba, fotos y firma del mayordomo. Al salir a la superficie, despacha el informe PDF formal al Administrador y rebaja repuestos en Defontana ERP.
+                </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <button onclick="switchTab('sla')" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-50 hover:bg-slate-100 text-[#00639e] border border-sky-200 transition shadow-sm">
+                    Póliza SLA & TI (Gonzalo)
+                </button>
+                <button onclick="switchTab('pdf')" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#00639e] hover:bg-[#005182] text-white transition shadow-sm">
+                    Ver Certificado PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- 2-COLUMN LAYOUT: (Left: Mobile App in Subterraneo / Right: Office ERP Monitor & PDF) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+            <!-- =================================================================
+                 LEFT COLUMN (5 COLS): PHONE MOCKUP (TÉCNICO EN TERRENO)
+                 ================================================================= -->
+            <section class="lg:col-span-5 flex flex-col items-center">
+                
+                <div class="w-full flex items-center justify-between mb-2 px-2 text-xs font-semibold text-slate-400">
+                    <span class="flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-[#00639e] inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" stroke-width="2"/><line x1="12" x2="12.01" y1="18" y2="18" stroke-width="2"/></svg>Vista Técnico en Terreno (PWA)
+                    </span>
+                    <span id="phoneSignalIndicator" class="font-mono-tech text-[11px] text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20">
+                        SIN SEÑAL 4G
+                    </span>
+                </div>
+
+                <!-- Phone Body Mockup -->
+                <div class="phone-frame">
+                    
+                    <!-- Top Notch & Sensor -->
+                    <div class="phone-notch"></div>
+
+                    <!-- In-App Header with Logo -->
+                    <div class="bg-white p-3.5 text-slate-900 border-b border-slate-200">
+                        <div class="flex items-center justify-between text-[11px] font-mono-tech text-slate-500 mb-2">
+                            <span id="phoneClock" class="font-bold">12:30 hrs</span>
+                            <span class="flex items-center gap-1 font-bold text-emerald-700">
+                                <span>94%</span>
+                                <span id="appSignalIcon" class="px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">Online</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <img src="logo_centralbombas.png" alt="Central Bombas" class="h-6 max-w-[120px] object-contain">
+                            <span id="mobOtBadge" class="px-2 py-0.5 rounded-full text-[10px] font-mono-tech font-bold bg-sky-50 text-[#00639e] border border-sky-200">
+                                OT #CB-842
+                            </span>
+                        </div>
+                        <div class="mt-1 flex items-center justify-between">
+                            <div class="text-xs font-black text-slate-900" id="mobBuildingName">Torre Los Leones</div>
+                        </div>
+                        <div class="text-[10px] text-slate-500 mt-0.5 flex items-center gap-1">
+                            <svg class="w-3 h-3 text-slate-400 inline shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg> <span id="mobBuildingAddress">Av. Los Leones 1450, Providencia</span>
+                        </div>
+                    </div>
+
+                    <!-- Scrollable Form Container -->
+                    <div class="p-3.5 space-y-3.5 overflow-y-auto max-h-[580px] bg-slate-100 text-slate-900 text-xs">
+                        
+                        <!-- Block 1: Service & Equipment Info -->
+                        <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">1. Equipo & Cuadrilla</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Visita en Curso</span>
+                            </div>
+                            <div class="text-xs font-bold text-slate-900" id="mobEquipmentTitle">
+                                Sala de Bombas Agua Potable (3 Bombas KSB 5.5 HP)
+                            </div>
+                            <div class="text-[11px] text-slate-600 mt-1">
+                                <strong>Técnico:</strong> Marcelo Gómez · Cuadrilla Hidráulica #2
+                            </div>
+                            <div class="text-[11px] text-slate-600">
+                                <strong>Contacto Edificio:</strong> Juan Carlos Muñoz (Mayordomo)
+                            </div>
+                        </div>
+
+                        <!-- Block 2: Technical Parameters (Hydraulic & Electric) -->
+                        <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">2. Mediciones de Ingeniería</span>
+                                <span class="text-[9px] font-mono-tech font-bold text-cyan-700 bg-cyan-50 px-1.5 py-0.5 rounded">TOLERANCIA OK</span>
+                            </div>
+
+                            <!-- Pump 1 -->
+                            <div class="mb-2.5 pb-2.5 border-b border-slate-100">
+                                <div class="flex items-center justify-between font-bold text-[11px] text-slate-800 mb-1">
+                                    <span><svg class="w-5 h-5 text-[#00639e] inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg> Bomba 1 (Principal)</span>
+                                    <span class="text-emerald-700 font-mono-tech">7.2 A · 4.5 bar</span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-1.5 text-[10px]">
+                                    <div>
+                                        <label class="text-slate-500 block">Voltaje (V):</label>
+                                        <input type="text" id="valVolt1" value="380 V" onchange="syncFromPhoneInputs()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono-tech font-semibold">
+                                    </div>
+                                    <div>
+                                        <label class="text-slate-500 block">Amperaje (A):</label>
+                                        <input type="text" id="valAmp1" value="7.2 A" onchange="syncFromPhoneInputs()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono-tech font-semibold text-cyan-700">
+                                    </div>
+                                    <div>
+                                        <label class="text-slate-500 block">Presión (bar):</label>
+                                        <input type="text" id="valBar1" value="4.5 bar" onchange="syncFromPhoneInputs()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono-tech font-semibold text-emerald-700">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pump 2 -->
+                            <div class="mb-2.5 pb-2.5 border-b border-slate-100">
+                                <div class="flex items-center justify-between font-bold text-[11px] text-slate-800 mb-1">
+                                    <span><svg class="w-5 h-5 text-[#00639e] inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg> Bomba 2 (Alternante)</span>
+                                    <span class="text-emerald-700 font-mono-tech">7.1 A · 4.5 bar</span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-1.5 text-[10px]">
+                                    <div>
+                                        <label class="text-slate-500 block">Voltaje (V):</label>
+                                        <input type="text" id="valVolt2" value="380 V" onchange="syncFromPhoneInputs()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono-tech font-semibold">
+                                    </div>
+                                    <div>
+                                        <label class="text-slate-500 block">Amperaje (A):</label>
+                                        <input type="text" id="valAmp2" value="7.1 A" onchange="syncFromPhoneInputs()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono-tech font-semibold text-cyan-700">
+                                    </div>
+                                    <div>
+                                        <label class="text-slate-500 block">Presión (bar):</label>
+                                        <input type="text" id="valBar2" value="4.5 bar" onchange="syncFromPhoneInputs()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono-tech font-semibold text-emerald-700">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tablero VDF & Estanque -->
+                            <div class="grid grid-cols-2 gap-2 text-[10px]">
+                                <div>
+                                    <label class="text-slate-500 block font-medium">Tablero VDF / Control:</label>
+                                    <select id="valTablero" onchange="syncFromPhoneInputs()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-semibold">
+                                        <option value="Operativo sin alarmas (Danfoss FC-102)">Danfoss VDF OK (Sin alarmas)</option>
+                                        <option value="Alarma de sobrecorriente restablecida">Alarma sobrecorriente reset</option>
+                                        <option value="Contactor con desgaste leve">Contactor desgaste leve</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-slate-500 block font-medium">Precarga Estanque:</label>
+                                    <input type="text" id="valEstanque" value="3.2 bar (Membrana OK)" onchange="syncFromPhoneInputs()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-semibold text-slate-800">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Block 3: Parts Replaced (Bodega & Defontana Facturacion) -->
+                        <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">3. Repuestos & Materiales</span>
+                                <span class="text-[9px] font-mono-tech font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">ALERTA BODEGA</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between p-1.5 rounded bg-slate-50 border border-slate-200 text-[11px]">
+                                    <div class="flex items-center gap-1.5">
+                                        <input type="checkbox" id="repuestoCheck1" checked onchange="syncFromPhoneInputs()" class="rounded text-cyan-600">
+                                        <label for="repuestoCheck1" class="font-medium text-slate-800">1x Sello Mecánico 1.5" Carburo</label>
+                                    </div>
+                                    <span class="font-mono-tech font-bold text-slate-700">$38.500</span>
+                                </div>
+                                <div class="flex items-center justify-between p-1.5 rounded bg-slate-50 border border-slate-200 text-[11px]">
+                                    <div class="flex items-center gap-1.5">
+                                        <input type="checkbox" id="repuestoCheck2" checked onchange="syncFromPhoneInputs()" class="rounded text-cyan-600">
+                                        <label for="repuestoCheck2" class="font-medium text-slate-800">1x Presostato Danfoss KP35</label>
+                                    </div>
+                                    <span class="font-mono-tech font-bold text-slate-700">$29.900</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Block 4: Photos (Evidence in Subterraneo) -->
+                        <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">4. Evidencia Fotográfica</span>
+                                <span class="text-[9px] font-mono-tech text-cyan-700 font-bold">2 FOTOS ADJUNTAS</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-[10px]">
+                                <div class="p-2 rounded-xl bg-slate-900 text-white border border-slate-800 flex flex-col justify-between">
+                                    <div class="text-[#00639e] font-mono-tech font-bold text-[9px]">FOTO 1 · ANTES</div>
+                                    <div class="font-bold my-1 text-slate-200">Goteo en Sello B1</div>
+                                    <div class="text-[8px] text-slate-400 font-mono-tech">Subterráneo -3 · 11:15</div>
+                                </div>
+                                <div class="p-2 rounded-xl bg-slate-900 text-white border border-slate-800 flex flex-col justify-between">
+                                    <div class="text-emerald-400 font-mono-tech font-bold text-[9px]">FOTO 2 · DESPUÉS</div>
+                                    <div class="font-bold my-1 text-slate-200">Presión 4.5 bar Estable</div>
+                                    <div class="text-[8px] text-slate-400 font-mono-tech">Operativo 100% · 12:05</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Block 5: Digital Touch Signature -->
+                        <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">5. Recepción Conforme Edificio</span>
+                                <div class="flex gap-2 text-[10px]">
+                                    <button type="button" onclick="autoDrawSignature()" class="text-cyan-700 font-bold hover:underline">Simular Firma</button>
+                                    <button type="button" onclick="clearSignatureCanvas()" class="text-rose-600 font-bold hover:underline">Limpiar</button>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-2 mb-2 text-[10px]">
+                                <div>
+                                    <label class="text-slate-500 block">Nombre Receptor:</label>
+                                    <input type="text" id="inpReceptorNombre" value="Juan Carlos Muñoz" oninput="syncFromPhoneInputs()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-semibold">
+                                </div>
+                                <div>
+                                    <label class="text-slate-500 block">Cargo / Turno:</label>
+                                    <input type="text" id="inpReceptorCargo" value="Mayordomo General" oninput="syncFromPhoneInputs()" class="w-full bg-slate-50 border border-slate-200 rounded p-1 font-semibold">
+                                </div>
+                            </div>
+
+                            <!-- Canvas -->
+                            <div class="border border-dashed border-slate-300 rounded-xl bg-slate-50 p-1">
+                                <canvas id="sigCanvas" width="330" height="75" class="w-full h-[75px] bg-white rounded-lg"></canvas>
+                            </div>
+                            <div class="text-[9px] text-slate-400 text-center mt-1 font-medium">
+                                Firma con el dedo en pantalla (guardada en base64 cifrada)
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button id="btnMobileSubmit" onclick="handleMobileSubmitAction()" class="w-full py-3.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wider text-white bg-[#00639e] hover:bg-[#005182] shadow-lg shadow-cyan-900/30 transition flex items-center justify-center gap-2">
+                            <svg class="w-3.5 h-3.5 text-white inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg>
+                            <span id="btnMobileSubmitText">Guardar OT en Memoria Local (Modo Subterráneo)</span>
+                        </button>
+                    </div>
+
+                    <!-- Phone Bottom Navigation Bar -->
+                    <div class="bg-white border-t border-slate-200 py-2.5 px-6 flex items-center justify-between text-slate-400 text-xs">
+                        <span class="text-cyan-600 font-bold">OT Actual</span>
+                        <span>Repuestos</span>
+                        <span>Ruta</span>
+                        <span>Ajustes</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =================================================================
+                 RIGHT COLUMN (7 COLS): OFFICE CONTROLS, DEFONTANA ERP, PDF & SLA
+                 ================================================================= -->
+            <section class="lg:col-span-7 flex flex-col space-y-4">
+                
+                <!-- Right Tabs Navigation -->
+                <div class="no-print bg-white p-1.5 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-2 shadow-sm">
+                    <div class="flex flex-wrap items-center gap-1 text-xs font-bold">
+                        <button id="tabBtnSync" onclick="switchTab('sync')" class="px-3.5 py-2 rounded-xl transition bg-[#00639e] text-white shadow font-bold">
+                            1. Sincronización & Defontana API
+                        </button>
+                        <button id="tabBtnPdf" onclick="switchTab('pdf')" class="px-3.5 py-2 rounded-xl transition text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-bold">
+                            2. Certificado PDF Edificio
+                        </button>
+                        <button id="tabBtnSla" onclick="switchTab('sla')" class="px-3.5 py-2 rounded-xl transition text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-bold flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                            3. SLA & Arquitectura TI (Gonzalo)
+                        </button>
+                        <button id="tabBtnBoard" onclick="switchTab('board')" class="px-3.5 py-2 rounded-xl transition text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-bold">
+                            4. Tablero de Cuadrillas
+                        </button>
+                    </div>
+
+                    <div id="badgeSyncStatus" class="px-3 py-1 rounded-full text-[11px] font-mono-tech font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                        is_synced: false (Memoria Local)
+                    </div>
+                </div>
+
+                <!-- =============================================================
+                     TAB 1: SYNCHRONIZATION PIPELINE & DEFONTANA API
+                     ============================================================= -->
+                <div id="contentSync" class="space-y-4">
+                    
+                    <!-- Pipeline 3-Step Card -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-base font-black text-slate-900 flex items-center gap-2">
+                                    <span>Flujo de Datos Terreno → Defontana ERP</span>
+                                    <span class="text-xs font-mono-tech px-2 py-0.5 rounded bg-sky-50 text-[#00639e] border border-sky-200 font-bold">CERO DIGITACIÓN MANUAL</span>
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-0.5">
+                                    Resuelve el problema de las órdenes en papel perdidas o arrugadas en camionetas.
+                                </p>
+                            </div>
+                            <button onclick="simulateAscensorSync()" class="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white transition shadow-lg flex items-center gap-2">
+                                <span>Probar Sincronización 4G Ahora</span>
+                            </button>
+                        </div>
+
+                        <!-- 3 Step Cards Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            
+                            <!-- Step 1 -->
+                            <div id="cardPipelineStep1" class="p-3.5 rounded-xl border border-amber-500/40 bg-amber-500/5">
+                                <div class="text-[10px] font-mono-tech font-bold text-amber-300 mb-1 flex items-center justify-between">
+                                    <span>PASO 1 · OFFLINE</span>
+                                    <span>Dexie IndexedDB</span>
+                                </div>
+                                <div class="text-xs font-bold text-amber-900">Memoria Local Móvil</div>
+                                <p class="text-[11px] text-slate-600 mt-1 leading-snug">
+                                    El técnico llena mediciones y firma en subterráneo -3. Se encripta localmente sin perder ni un bit.
+                                </p>
+                                <div id="lblStep1Count" class="mt-2 text-[10px] font-mono-tech text-amber-300 font-bold">
+                                    ● 1 OT en cola local
+                                </div>
+                            </div>
+
+                            <!-- Step 2 -->
+                            <div id="cardPipelineStep2" class="p-3.5 rounded-xl border border-slate-200 bg-slate-50">
+                                <div class="text-[10px] font-mono-tech font-bold text-slate-400 mb-1 flex items-center justify-between">
+                                    <span>PASO 2 · DISPARO 4G</span>
+                                    <span>Efinnovation Cloud</span>
+                                </div>
+                                <div class="text-xs font-bold text-slate-800">Sincronización Silenciosa</div>
+                                <p class="text-[11px] text-slate-400 mt-1 leading-snug">
+                                    Al salir a la calle, el celular detecta internet y sube la orden en segundo plano (1.2 segundos).
+                                </p>
+                                <div id="lblStep2Status" class="mt-2 text-[10px] font-mono-tech text-slate-500">
+                                    ○ En espera de señal
+                                </div>
+                            </div>
+
+                            <!-- Step 3 -->
+                            <div id="cardPipelineStep3" class="p-3.5 rounded-xl border border-slate-200 bg-slate-50">
+                                <div class="text-[10px] font-mono-tech font-bold text-slate-400 mb-1 flex items-center justify-between">
+                                    <span>PASO 3 · ERP & CLIENTE</span>
+                                    <span>Defontana API</span>
+                                </div>
+                                <div class="text-xs font-bold text-slate-800">Facturación & PDF</div>
+                                <p class="text-[11px] text-slate-400 mt-1 leading-snug">
+                                    Crea la orden en Defontana, rebaja repuestos de bodega y envía el PDF al Administrador del edificio.
+                                </p>
+                                <div id="lblStep3Status" class="mt-2 text-[10px] font-mono-tech text-slate-500">
+                                    ○ Pendiente
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Defontana Live JSON Payload View -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                <span class="text-xs font-mono-tech font-bold text-[#00639e] uppercase">Defontana API Endpoint Contract</span>
+                                <h4 class="text-sm font-black text-slate-900 mt-0.5">Payload JSON Generado para Facturación y Bodega</h4>
+                            </div>
+                            <span class="text-xs font-mono-tech text-slate-400 px-2 py-0.5 rounded bg-slate-800">
+                                POST /v1/sales/orders
+                            </span>
+                        </div>
+                        <pre id="jsonPayloadBlock" class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-[11px] font-mono-tech text-emerald-300 overflow-x-auto max-h-[260px] leading-relaxed"></pre>
+                    </div>
+
+                    <!-- Live Event Log -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+                        <div class="flex items-center justify-between mb-2 text-xs font-bold">
+                            <span class="text-slate-800 font-bold">Registro de Transacciones en Vivo</span>
+                            <span class="text-slate-500 font-mono-tech">WebSocket · 200 OK</span>
+                        </div>
+                        <div id="eventLogContainer" class="space-y-1.5 text-[11px] font-mono-tech text-slate-400 max-h-36 overflow-y-auto">
+                            <div class="text-[#00639e]">12:30:15 - [OFFLINE] Registro iniciado en Subterráneo -3 (Torre Los Leones)</div>
+                            <div class="text-slate-400">12:30:18 - [DEXIE] Datos guardados en almacenamiento local del dispositivo (ID: CB-842)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =============================================================
+                     TAB 2: OFFICIAL CERTIFICATE PDF (PARA EL ADMINISTRADOR)
+                     ============================================================= -->
+                <div id="contentPdf" class="hidden space-y-4">
+                    
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex items-center justify-between shadow-xl">
+                        <div>
+                            <h3 class="text-sm font-black text-slate-900">Certificado Técnico Oficial de Mantención</h3>
+                            <p class="text-xs text-slate-400">Este es el documento exacto que recibe el Administrador del Edificio para autorizar el pago.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="window.print()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-700 transition border border-slate-300">
+                                Imprimir / Guardar PDF
+                            </button>
+                            <button onclick="simulateEmailSendToAdmin()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#00639e] hover:bg-[#005182] text-white transition shadow shadow-cyan-900/40">
+                                Simular Envío por Correo al Edificio
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Realistic White PDF Document View -->
+                    <div class="bg-white text-slate-900 p-6 md:p-8 rounded-2xl shadow-2xl border border-slate-300 text-xs">
+                        
+                        <!-- Header Document with Real Central Bombas Logo -->
+                        <div class="flex justify-between items-start border-b-2 border-slate-900 pb-4 mb-4">
+                            <div>
+                                <div class="flex items-center gap-3">
+                                    <img src="logo_centralbombas.png" alt="Central Bombas SpA" class="h-12 max-w-[200px] object-contain">
+                                    <div class="border-l border-slate-300 pl-3">
+                                        <h2 class="text-xs font-extrabold uppercase tracking-tight text-slate-900">CENTRAL BOMBAS SpA</h2>
+                                        <p class="text-[9px] text-slate-500 font-medium">RUT 76.812.340-K · Sepúlveda Leyton 3068, Santiago · centralbombas.cl</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="px-2 py-1 rounded bg-slate-100 font-mono-tech font-bold text-slate-800 border border-slate-300 text-[11px]">
+                                    INFORME TÉCNICO Nº CB-2026-0842
+                                </span>
+                                <div class="text-[10px] text-slate-500 mt-1" id="pdfDateLabel">Fecha: 3 de Noviembre de 2026 · 12:30 hrs</div>
+                            </div>
+                        </div>
+
+                        <!-- Client & Building Metadata -->
+                        <div class="grid grid-cols-2 gap-4 p-3 rounded-xl bg-slate-50 border border-slate-200 mb-4">
+                            <div>
+                                <div class="text-[10px] font-bold text-slate-400 uppercase">Edificio / Condominio:</div>
+                                <div class="text-xs font-bold text-slate-900" id="pdfBuildingName">Comunidad Edificio Torre Los Leones</div>
+                                <div class="text-[11px] text-slate-600" id="pdfBuildingAddress">Av. Los Leones 1450, Providencia</div>
+                            </div>
+                            <div>
+                                <div class="text-[10px] font-bold text-slate-400 uppercase">Sistema Intervenido:</div>
+                                <div class="text-xs font-bold text-slate-900" id="pdfEquipment">Sala de Bombas Agua Potable (3 Bombas KSB 5.5 HP)</div>
+                                <div class="text-[11px] text-slate-600">Técnico Responsable: Marcelo Gómez (Central Bombas)</div>
+                            </div>
+                        </div>
+
+                        <!-- Technical Parameter Table -->
+                        <div class="mb-4">
+                            <h4 class="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-2">1. Protocolo de Mediciones Hidráulicas y Eléctricas</h4>
+                            <table class="w-full text-left border-collapse text-[11px]">
+                                <thead>
+                                    <tr class="bg-slate-100 border-y border-slate-300 text-slate-700 font-bold">
+                                        <th class="py-1.5 px-2">Equipo / Componente</th>
+                                        <th class="py-1.5 px-2">Tensión (V)</th>
+                                        <th class="py-1.5 px-2">Corriente (A)</th>
+                                        <th class="py-1.5 px-2">Presión Trabajo</th>
+                                        <th class="py-1.5 px-2">Estado Sello / Fugas</th>
+                                        <th class="py-1.5 px-2">Resultado</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    <tr>
+                                        <td class="py-1.5 px-2 font-semibold">Bomba 1 (Principal)</td>
+                                        <td class="py-1.5 px-2 font-mono-tech" id="pdfV1">380 V</td>
+                                        <td class="py-1.5 px-2 font-mono-tech" id="pdfA1">7.2 A</td>
+                                        <td class="py-1.5 px-2 font-mono-tech" id="pdfP1">4.5 bar</td>
+                                        <td class="py-1.5 px-2 text-emerald-700 font-medium">Sin goteo (Sello Nuevo)</td>
+                                        <td class="py-1.5 px-2 font-bold text-emerald-700">CONFORME</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-1.5 px-2 font-semibold">Bomba 2 (Alternancia)</td>
+                                        <td class="py-1.5 px-2 font-mono-tech" id="pdfV2">380 V</td>
+                                        <td class="py-1.5 px-2 font-mono-tech" id="pdfA2">7.1 A</td>
+                                        <td class="py-1.5 px-2 font-mono-tech" id="pdfP2">4.5 bar</td>
+                                        <td class="py-1.5 px-2 text-emerald-700 font-medium">Operativo normal</td>
+                                        <td class="py-1.5 px-2 font-bold text-emerald-700">CONFORME</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-1.5 px-2 font-semibold">Tablero Fuerza & VDF</td>
+                                        <td class="py-1.5 px-2 font-mono-tech">380 V Trif.</td>
+                                        <td class="py-1.5 px-2 font-mono-tech">Balanceado</td>
+                                        <td class="py-1.5 px-2 font-mono-tech">Auto</td>
+                                        <td class="py-1.5 px-2 text-slate-700" id="pdfTableroTxt">Danfoss FC-102 sin alarmas</td>
+                                        <td class="py-1.5 px-2 font-bold text-emerald-700">CONFORME</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Repuestos Reemplazados -->
+                        <div class="mb-4 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                            <h4 class="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">2. Materiales y Repuestos Utilizados</h4>
+                            <p class="text-[11px] text-slate-700 leading-relaxed" id="pdfRepuestosTxt">
+                                Se reemplaza kit de sello mecánico 1.5" carburo de silicio en Bomba #1 por goteo preventivo y presostato Danfoss KP35 para estabilización de partida. Sistema probado en régimen durante 45 minutos.
+                            </p>
+                        </div>
+
+                        <!-- Photographic Evidence Grid -->
+                        <div class="mb-4">
+                            <h4 class="text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-2">3. Registro Fotográfico en Terreno</h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="border border-slate-300 rounded-xl p-2 bg-slate-900 text-white">
+                                    <div class="text-[9px] font-mono-tech text-[#00639e] font-bold">REGISTRO INICIAL (ANTES)</div>
+                                    <div class="text-xs font-semibold mt-1">Fuga en Sello Bomba 1</div>
+                                    <div class="text-[9px] text-slate-400 mt-1 font-mono-tech">11:15 hrs · Subterráneo Nivel -3</div>
+                                </div>
+                                <div class="border border-slate-300 rounded-xl p-2 bg-slate-900 text-white">
+                                    <div class="text-[9px] font-mono-tech text-emerald-400 font-bold">REGISTRO FINAL (DESPUÉS)</div>
+                                    <div class="text-xs font-semibold mt-1">Presión Estabilizada 4.5 bar</div>
+                                    <div class="text-[9px] text-slate-400 mt-1 font-mono-tech">12:05 hrs · Sistema en Automático</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Signatures Footer -->
+                        <div class="grid grid-cols-2 gap-6 pt-4 border-t border-slate-300">
+                            <div class="text-center">
+                                <div class="h-14 flex items-center justify-center">
+                                    <span class="font-mono-tech text-xs text-slate-500 font-bold">[Firma Digital Técnico Central Bombas]</span>
+                                </div>
+                                <div class="border-t border-slate-400 pt-1 text-[11px] font-bold text-slate-800">Marcelo Gómez</div>
+                                <div class="text-[10px] text-slate-500">Técnico Especialista · Central Bombas SpA</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="h-14 flex items-center justify-center">
+                                    <img id="pdfSigImg" src="" alt="Firma Mayordomo" class="max-h-12 max-w-[180px] object-contain">
+                                </div>
+                                <div class="border-t border-slate-400 pt-1 text-[11px] font-bold text-slate-800" id="pdfReceptorName">Juan Carlos Muñoz</div>
+                                <div class="text-[10px] text-slate-500" id="pdfReceptorCargo">Mayordomo General · Recepción Conforme</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =============================================================
+                     TAB 3: ESPECIAL PARA TI / GONZALO QUIROGA (ARQUITECTURA & SLA)
+                     ============================================================= -->
+                <div id="contentSla" class="hidden space-y-4">
+                    
+                    <!-- Header Card SLA -->
+                    <div class="bg-white border border-emerald-200 rounded-2xl p-5 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-emerald-700 font-mono-tech text-xs font-bold uppercase tracking-wider">Documento de Arquitectura & Continuidad Operativa</span>
+                                <h3 class="text-base font-black text-slate-900 mt-1">
+                                    Póliza de Soporte y Estabilidad Tecnológica para Central Bombas
+                                </h3>
+                                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                                    Responde a los dos puntos cruciales levantados en la reunión con Francisco y Gonzalo: <strong>¿Qué pasa si falla un domingo en subterráneo?</strong> y <strong>¿Quién se hace cargo del soporte y mantención en el tiempo?</strong>
+                                </p>
+                            </div>
+                            <span class="px-3 py-1 rounded-xl text-xs font-mono-tech font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                SLA 99.9% Uptime
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Architecture Diagram Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
+                        <!-- Block 1: Offline Engine -->
+                        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-[#00639e] font-bold text-sm">1. Resiliencia Offline en Teléfono</span>
+                            </div>
+                            <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-emerald-400"><span class="text-emerald-400 font-bold font-mono-tech">[OK]</span></span>
+                                    <span><strong>IndexedDB + ServiceWorker:</strong> La app no depende de Play Store ni se congela si se corta la señal en el subterráneo -3.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-emerald-400"><span class="text-emerald-400 font-bold font-mono-tech">[OK]</span></span>
+                                    <span><strong>Almacenamiento Local Transaccional:</strong> Las fotos y mediciones se guardan en la memoria flash del teléfono hasta recibir acuse de recibo del servidor.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Block 2: Queue & Retry Worker -->
+                        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-[#00639e] font-bold text-sm">2. Cola de Reintentos (Exponential Backoff)</span>
+                            </div>
+                            <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-emerald-400"><span class="text-emerald-400 font-bold font-mono-tech">[OK]</span></span>
+                                    <span><strong>Tolerancia a Caídas de Defontana:</strong> Si la API de Defontana está lenta o en mantención nocturna, la orden queda retenida en cola Redis y se reintenta automáticamente por 72 horas.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-emerald-400"><span class="text-emerald-400 font-bold font-mono-tech">[OK]</span></span>
+                                    <span><strong>Cero Pérdida de Órdenes:</strong> Ni una sola orden de trabajo ni cobro de repuesto se extravía.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- The SLA Service Model (What Francisco and Gonzalo need to hear) -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                        <h4 class="text-sm font-black text-slate-900 mb-3 flex items-center gap-2">
+                            <span>El Modelo de Respaldo Efinnovation (Cero Sistemas Huérfanos)</span>
+                        </h4>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                                <div class="text-[#00639e] font-bold mb-1">Nube Administrada</div>
+                                <p class="text-slate-600 text-[11px] leading-relaxed">
+                                    Infraestructura cloud privada monitoreada 24/7. Central Bombas no necesita comprar servidores físicos ni lidiar con configuraciones de red.
+                                </p>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                                <div class="text-emerald-400 font-bold mb-1">Soporte Correctivo SLA</div>
+                                <p class="text-slate-600 text-[11px] leading-relaxed">
+                                    Tiempo de respuesta &lt; 2 horas ante cualquier incidencia de sincronización. Un ingeniero asignado atiende directamente a Gonzalo.
+                                </p>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                                <div class="text-amber-400 font-bold mb-1">Mantenimiento de API</div>
+                                <p class="text-slate-600 text-[11px] leading-relaxed">
+                                    Cualquier actualización de campos o versiones en la API de Defontana está incluida en la póliza mensual sin cobros sorpresa.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =============================================================
+                     TAB 4: DISPATCH BOARD (MONITOREO DE CUADRILLAS 24/7)
+                     ============================================================= -->
+                <div id="contentBoard" class="hidden space-y-4">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-base font-bold text-white">Monitoreo de Cuadrillas en Tiempo Real</h3>
+                                <p class="text-xs text-slate-400">Estado de las visitas del día en edificios de Santiago.</p>
+                            </div>
+                            <span class="text-xs font-mono-tech px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">
+                                3 Cuadrillas Activas
+                            </span>
+                        </div>
+
+                        <div class="space-y-2.5">
+                            <div class="p-3 rounded-xl bg-slate-950 border border-cyan-800/40 flex items-center justify-between text-xs">
+                                <div>
+                                    <div class="font-bold text-white flex items-center gap-2">
+                                        <span>Marcelo Gómez (Cuadrilla #2)</span>
+                                        <span class="text-[10px] font-mono-tech px-2 py-0.5 rounded bg-cyan-950 text-[#00639e]">Torre Los Leones</span>
+                                    </div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5">En subterráneo -3 · Finalizando protocolo de presiones</div>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300">
+                                    En Ejecución
+                                </span>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+                                <div>
+                                    <div class="font-bold text-white flex items-center gap-2">
+                                        <span>Carlos Valenzuela (Cuadrilla #1)</span>
+                                        <span class="text-[10px] font-mono-tech px-2 py-0.5 rounded bg-slate-800 text-slate-300">Condominio Plaza Ñuñoa</span>
+                                    </div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5">En tránsito hacia Providencia · OT de urgencia finalizada</div>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300">
+                                    Sincronizado & PDF Enviado
+                                </span>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+                                <div>
+                                    <div class="font-bold text-white flex items-center gap-2">
+                                        <span>Patricio Soto (Cuadrilla #3)</span>
+                                        <span class="text-[10px] font-mono-tech px-2 py-0.5 rounded bg-slate-800 text-slate-300">Edificio Capital</span>
+                                    </div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5">Próxima visita: 15:30 hrs · Mantenimiento Grupo Electrógeno</div>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-800 text-slate-400">
+                                    Programada
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <!-- =========================================================================
+         FOOTER
+         ========================================================================= -->
+    <footer class="no-print bg-slate-950 border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+        Central Bombas SpA · Demostrador Tecnológico Diseñado por <a href="https://efinnovation.cl" target="_blank" class="text-[#00639e] hover:underline font-semibold">Efinnovation SpA</a> · Santiago de Chile
+    </footer>
+
+    <!-- =========================================================================
+         JAVASCRIPT LOGIC & SIMULATOR ENGINE
+         ========================================================================= -->
+    <script>
+        // State Machine
+        const state = {
+            isOffline: true,
+            isSynced: false,
+            buildingKey: 'los_leones',
+            hasSignature: true,
+            orderId: 'CB-2026-0842'
+        };
+
+        const buildingPresets = {
+            los_leones: {
+                id: 'CB-2026-0842',
+                name: 'Comunidad Edificio Torre Los Leones',
+                address: 'Av. Los Leones 1450, Providencia, Santiago',
+                equipment: 'Sala de Bombas Agua Potable (3 Bombas KSB 5.5 HP + Tablero VDF)',
+                technician: 'Marcelo Gómez · Cuadrilla Hidráulica #2',
+                receiver: 'Juan Carlos Muñoz',
+                cargo: 'Mayordomo General',
+                v1: '380 V', a1: '7.2 A', p1: '4.5 bar',
+                v2: '380 V', a2: '7.1 A', p2: '4.5 bar',
+                tablero: 'Danfoss FC-102 sin alarmas',
+                estanque: '3.2 bar (Membrana OK)',
+                repuestos: [
+                    { name: '1x Sello Mecánico 1.5" Carburo', price: 38500, code: 'REP-SEL-150' },
+                    { name: '1x Presostato Danfoss KP35', price: 29900, code: 'REP-PRE-KP35' }
+                ],
+                notes: 'Se realiza mantención preventiva mensual de sala de bombas de agua potable. Se reemplaza kit de sello mecánico en Bomba #1 por leve goteo detectado en pauta y presostato Danfoss KP35 para calibración de partida. Sistema probado en régimen de alternancia automática por variador de frecuencia Danfoss FC-102. Presión estabilizada en 4.5 bar.'
+            },
+            nunoa: {
+                id: 'CB-2026-0843',
+                name: 'Condominio Plaza Ñuñoa',
+                address: 'Av. Irarrázaval 3600, Ñuñoa, Santiago',
+                equipment: 'Grupo Presurización Sentina & Aguas Lluvias (2 Bombas Sumergibles Zenit 3 HP)',
+                technician: 'Carlos Valenzuela · Cuadrilla Urgencias #1',
+                receiver: 'Margarita Soto',
+                cargo: 'Administradora de Edificio',
+                v1: '380 V', a1: '5.8 A', p1: '2.8 bar',
+                v2: '380 V', a2: '5.9 A', p2: '2.8 bar',
+                tablero: 'Tablero Sentina con Alarma Acústica OK',
+                estanque: 'Pozo Sentina Nivel Controlado',
+                repuestos: [
+                    { name: '1x Flotador de Nivel Hermético 10m', price: 24500, code: 'REP-FLOT-10' },
+                    { name: '2x Horas Técnicas de Emergencia Nocturna', price: 45000, code: 'SRV-HR-URG' }
+                ],
+                notes: 'Atención de emergencia por alarma de alto nivel en pozo sentina subterráneo -3. Se destraba rodete impulsor de bomba sentina #1 y se reemplaza flotador de nivel hermético dañado. Pruebas de achique completadas con éxito en ambas bombas.'
+            },
+            capital: {
+                id: 'CB-2026-0844',
+                name: 'Edificio Capital Santiago',
+                address: 'Moneda 1040, Santiago Centro',
+                equipment: 'Red Húmeda Incendio 15 HP + Grupo Electrógeno 120 kVA Cummins',
+                technician: 'Patricio Soto · Cuadrilla Industrial #3',
+                receiver: 'Roberto Alarcón',
+                cargo: 'Jefe de Operaciones Edificio',
+                v1: '380 V', a1: '18.4 A', p1: '8.2 bar',
+                v2: '380 V', a2: '2.4 A (Jockey)', p2: '8.5 bar',
+                tablero: 'Tablero Transferencia Automática TTA OK',
+                estanque: 'Baterías 27.4V Flotación OK',
+                repuestos: [
+                    { name: '1x Filtro Petróleo Diésel Fleetguard', price: 18900, code: 'REP-FILT-DIES' },
+                    { name: '1x Manómetro Glicerina 0-16 bar 1/4" NPT', price: 16500, code: 'REP-MAN-GLIC' }
+                ],
+                notes: 'Inspección periódica de red contra incendios y grupo electrógeno. Bomba Jockey mantiene red presurizada en 8.5 bar. Bomba principal de 15 HP arranca sin retardo. Grupo electrógeno probado en vacío con transferencia TTA operativa.'
+            }
+        };
+
+        // Initialize Canvas
+        const canvas = document.getElementById('sigCanvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+        let isDrawing = false;
+
+        function initSignature() {
+            if (!canvas || !ctx) return;
+            ctx.lineWidth = 2.2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#0f172a';
+
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: (clientX - rect.left) * (canvas.width / rect.width),
+                    y: (clientY - rect.top) * (canvas.height / rect.height)
+                };
+            }
+
+            canvas.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                const pos = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDrawing) {
+                    isDrawing = false;
+                    syncSignatureToPdf();
+                }
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (!isDrawing) return;
+                const pos = getPos(e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            });
+
+            // Touch support
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                isDrawing = true;
+                const pos = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            }, { passive: false });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (!isDrawing) return;
+                const pos = getPos(e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            }, { passive: false });
+
+            canvas.addEventListener('touchend', () => {
+                if (isDrawing) {
+                    isDrawing = false;
+                    syncSignatureToPdf();
+                }
+            });
+
+            autoDrawSignature();
+        }
+
+        function clearSignatureCanvas() {
+            if (!ctx || !canvas) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('pdfSigImg').src = '';
+        }
+
+        function autoDrawSignature() {
+            if (!ctx || !canvas) return;
+            clearSignatureCanvas();
+            ctx.beginPath();
+            ctx.moveTo(25, 45);
+            ctx.bezierCurveTo(60, 20, 90, 60, 130, 35);
+            ctx.bezierCurveTo(160, 15, 180, 50, 220, 30);
+            ctx.bezierCurveTo(240, 20, 270, 45, 295, 38);
+            ctx.stroke();
+
+            // Line underline
+            ctx.beginPath();
+            ctx.moveTo(40, 58);
+            ctx.lineTo(280, 52);
+            ctx.stroke();
+
+            syncSignatureToPdf();
+        }
+
+        function syncSignatureToPdf() {
+            if (!canvas) return;
+            const dataUrl = canvas.toDataURL('image/png');
+            const target = document.getElementById('pdfSigImg');
+            if (target) target.src = dataUrl;
+        }
+
+        // Tab Switching in Right Column
+        function switchTab(tabId) {
+            const tabs = ['sync', 'pdf', 'sla', 'board'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('tabBtn' + capitalize(t));
+                const content = document.getElementById('content' + capitalize(t));
+                if (btn && content) {
+                    if (t === tabId) {
+                        btn.className = 'px-3.5 py-2 rounded-xl transition bg-cyan-600 text-white shadow font-bold text-xs flex items-center gap-1.5';
+                        content.classList.remove('hidden');
+                    } else {
+                        btn.className = 'px-3.5 py-2 rounded-xl transition text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-bold font-bold text-xs flex items-center gap-1.5';
+                        content.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        // Preset Loading
+        function loadBuildingPreset(key) {
+            state.buildingKey = key;
+            const p = buildingPresets[key];
+            if (!p) return;
+
+            // Update top preset buttons style
+            ['btnPreset1', 'btnPreset2', 'btnPreset3'].forEach(b => {
+                const el = document.getElementById(b);
+                if (el) el.className = 'px-3 py-1.5 rounded-lg font-semibold transition text-slate-300 hover:text-white hover:bg-slate-800';
+            });
+            if (key === 'los_leones') document.getElementById('btnPreset1').className = 'px-3 py-1.5 rounded-lg font-semibold transition bg-cyan-600 text-white shadow';
+            if (key === 'nunoa') document.getElementById('btnPreset2').className = 'px-3 py-1.5 rounded-lg font-semibold transition bg-cyan-600 text-white shadow';
+            if (key === 'capital') document.getElementById('btnPreset3').className = 'px-3 py-1.5 rounded-lg font-semibold transition bg-cyan-600 text-white shadow';
+
+            // Mobile Inputs
+            document.getElementById('mobBuildingName').textContent = p.name;
+            document.getElementById('mobBuildingAddress').textContent = p.address;
+            document.getElementById('mobOtBadge').textContent = 'OT #' + p.id;
+            document.getElementById('mobEquipmentTitle').textContent = p.equipment;
+            document.getElementById('inpReceptorNombre').value = p.receiver;
+            document.getElementById('inpReceptorCargo').value = p.cargo;
+
+            document.getElementById('valVolt1').value = p.v1;
+            document.getElementById('valAmp1').value = p.a1;
+            document.getElementById('valBar1').value = p.p1;
+            document.getElementById('valVolt2').value = p.v2;
+            document.getElementById('valAmp2').value = p.a2;
+            document.getElementById('valBar2').value = p.p2;
+            document.getElementById('valEstanque').value = p.estanque;
+
+            // PDF Inputs
+            document.getElementById('pdfBuildingName').textContent = p.name;
+            document.getElementById('pdfBuildingAddress').textContent = p.address;
+            document.getElementById('pdfEquipment').textContent = p.equipment;
+            document.getElementById('pdfReceptorName').textContent = p.receiver;
+            document.getElementById('pdfReceptorCargo').textContent = p.cargo;
+            document.getElementById('pdfV1').textContent = p.v1;
+            document.getElementById('pdfA1').textContent = p.a1;
+            document.getElementById('pdfP1').textContent = p.p1;
+            document.getElementById('pdfV2').textContent = p.v2;
+            document.getElementById('pdfA2').textContent = p.a2;
+            document.getElementById('pdfP2').textContent = p.p2;
+            document.getElementById('pdfRepuestosTxt').textContent = p.notes;
+
+            autoDrawSignature();
+            updateDefontanaPayload();
+            addEventLog(`Cargada pauta para: ${p.name}`);
+        }
+
+        // Toggle Signal Simulator
+        function toggleSignalSimulation() {
+            state.isOffline = !state.isOffline;
+            const btn = document.getElementById('btnSignalToggle');
+            const lbl = document.getElementById('signalStatusLabel');
+            const phoneInd = document.getElementById('phoneSignalIndicator');
+            const appSig = document.getElementById('appSignalIcon');
+            const btnSubmit = document.getElementById('btnMobileSubmitText');
+
+            if (state.isOffline) {
+                btn.className = 'flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-mono-tech font-bold transition border border-rose-500/40 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20';
+                lbl.innerHTML = 'Subterráneo -3 (Offline)';
+                phoneInd.className = 'font-mono-tech text-[11px] text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20';
+                phoneInd.textContent = 'SIN SEÑAL 4G';
+                appSig.textContent = 'Offline';
+                btnSubmit.textContent = 'Guardar OT en Memoria Local (Modo Subterráneo)';
+                addEventLog('[SEÑAL] Técnico ingresa a subterráneo -3. Sin conectividad 4G.');
+            } else {
+                btn.className = 'flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-mono-tech font-bold transition border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20';
+                lbl.innerHTML = 'En la Superficie (4G Conectado)';
+                phoneInd.className = 'font-mono-tech text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20';
+                phoneInd.textContent = '4G LTE ACTIVO';
+                appSig.textContent = '4G Online';
+                btnSubmit.textContent = 'Cerrar y Sincronizar Inmediatamente con Defontana';
+                addEventLog('[SEÑAL] Técnico sube a la superficie. 4G LTE conectado.');
+
+                if (state.hasPendingOfflineOt) {
+                    state.hasPendingOfflineOt = false;
+                    addEventLog('[AUTO-SYNC] Detectada conexión 4G. Transmitiendo orden en cola a Defontana...');
+                    simulateAscensorSync();
+                }
+            }
+        }
+
+        // Sync Simulation Trigger
+        function simulateAscensorSync() {
+            if (state.isOffline) {
+                toggleSignalSimulation();
+            }
+
+            addEventLog('[SINC] Detectada conexión a internet. Disparando motor de sincronización...');
+            
+            // Visual step 2
+            const card2 = document.getElementById('cardPipelineStep2');
+            card2.className = 'p-3.5 rounded-xl border border-cyan-500/60 bg-cyan-500/10 pulse-subtle';
+            document.getElementById('lblStep2Status').innerHTML = '<span class="text-[#00639e] font-bold">● Transfiriendo datos y fotos (TLS 1.3)...</span>';
+
+            setTimeout(() => {
+                card2.className = 'p-3.5 rounded-xl border border-emerald-500/50 bg-emerald-500/10';
+                document.getElementById('lblStep2Status').innerHTML = '<span class="text-emerald-400 font-bold"><span class="text-emerald-400 font-bold font-mono-tech">[OK]</span> 200 OK en 1.1s</span>';
+
+                // Visual step 3
+                const card3 = document.getElementById('cardPipelineStep3');
+                card3.className = 'p-3.5 rounded-xl border border-emerald-500/60 bg-emerald-500/10 pulse-subtle';
+                document.getElementById('lblStep3Status').innerHTML = '<span class="text-emerald-300 font-bold"><span class="text-emerald-400 font-bold font-mono-tech">[OK]</span> Orden #CB-842 inyectada en Defontana</span>';
+
+                // Update Badges
+                state.isSynced = true;
+                const syncBadge = document.getElementById('badgeSyncStatus');
+                syncBadge.className = 'px-3 py-1 rounded-full text-[11px] font-mono-tech font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+                syncBadge.textContent = 'is_synced: true (Defontana ERP Actualizado)';
+
+                document.getElementById('lblStep1Count').innerHTML = '<span class="text-emerald-400 font-bold"><span class="text-emerald-400 font-bold font-mono-tech">[OK]</span> 0 OTs pendientes en cola</span>';
+
+                addEventLog('[DEFONTANA] Inyección exitosa en API: Orden de Venta creada. Repuestos rebajados de Bodega Sepúlveda Leyton.');
+                addEventLog('[CLIENTE] Certificado PDF enviado por correo automático a la Administración del edificio.');
+
+                showPortalToast('¡Sincronización Exitosa con Defontana ERP!', '1. Orden de Venta registrada.\n2. Repuestos rebajados en Bodega Sepúlveda Leyton.\n3. Certificado formal emitido para cobro inmediato.');
+            }, 1200);
+        }
+
+        function handleMobileSubmitAction() {
+            if (state.isOffline) {
+                state.hasPendingOfflineOt = true;
+                addEventLog('[OFFLINE] OT #CB-842 guardada en almacenamiento IndexedDB del celular.');
+                addEventLog('[COLA] 1 Orden retenida en cola local. Esperando señal 4G de superficie.');
+                document.getElementById('lblStep1Count').innerHTML = '<span class="text-amber-600 font-bold font-mono-tech">● 1 OT en cola interna (esperando 4G)</span>';
+                document.getElementById('btnMobileSubmitText').textContent = 'OT Guardada en Memoria (Subterráneo -3)';
+                showPortalToast(
+                    'Modo Subterráneo Activo (Offline)',
+                    'Orden guardada con éxito en la memoria interna del teléfono.\n\nPermanece offline en subterráneo. Al salir a la calle y pulsar el botón 4G se transmitirá automáticamente.'
+                );
+            } else {
+                simulateAscensorSync();
+            }
+        }
+
+        function simulateEmailSendToAdmin() {
+            const p = buildingPresets[state.buildingKey];
+            showPortalToast('📧 Correo Automático Despachado al Edificio', `Para: Administrador ${p.name}
+Adjunto: Certificado_CB-2026-0842.pdf
+El cliente recibe el informe técnico formal de inmediato.`);
+            addEventLog(`[DESPACHO] Email con PDF adjunto enviado a la administración de ${p.name}`);
+        }
+
+        
+        function showPortalToast(title, msg) {
+            let toast = document.getElementById('portalToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'portalToast';
+                toast.className = 'fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-white border border-slate-200 text-slate-900 shadow-2xl flex items-start gap-3 max-w-sm transition-all duration-300';
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = `
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0 mt-0.5">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <div>
+                    <h5 class="text-xs font-bold text-slate-900">${title}</h5>
+                    <p class="text-[11px] text-slate-600 mt-0.5 whitespace-pre-line leading-relaxed">${msg}</p>
+                </div>
+            `;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+            }, 4000);
+        }
+
+        // Live Defontana JSON Generator
+        function updateDefontanaPayload() {
+            const p = buildingPresets[state.buildingKey];
+            const payload = {
+                endpoint: "https://api.defontana.com/v1/sales/orders",
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer df_live_tok_982341902834091283",
+                    "Content-Type": "application/json"
+                },
+                body: {
+                    company_rut: "76.812.340-K",
+                    subsidiary: "Central Bombas SpA - Sepúlveda Leyton",
+                    cost_center: "CC-BOMBAS-IMPULSION-SANTIAGO",
+                    order_number: p.id,
+                    service_date: "2026-11-03T12:30:00-03:00",
+                    client: {
+                        name: p.name,
+                        address: p.address,
+                        receiver_name: p.receiver,
+                        receiver_role: p.cargo,
+                        signature_captured: true
+                    },
+                    equipment: {
+                        description: p.equipment,
+                        readings: {
+                            pump_1_volts: p.v1,
+                            pump_1_amps: p.a1,
+                            pump_1_pressure: p.p1,
+                            pump_2_volts: p.v2,
+                            pump_2_amps: p.a2,
+                            pump_2_pressure: p.p2,
+                            vdf_status: p.tablero,
+                            hydro_tank_pressure: p.estanque
+                        }
+                    },
+                    consumed_parts: p.repuestos.map(r => ({
+                        item_code: r.code,
+                        description: r.name,
+                        quantity: 1,
+                        unit_price_clp: r.price,
+                        warehouse_origin: "BODEGA-CENTRAL-SEPULVEDA-LEYTON"
+                    })),
+                    sla_monitoring: {
+                        sync_mode: "offline_resilient_indexeddb",
+                        queue_retry_enabled: true,
+                        efinnovation_managed: true
+                    }
+                }
+            };
+
+            const pre = document.getElementById('jsonPayloadBlock');
+            if (pre) {
+                pre.textContent = JSON.stringify(payload, null, 2);
+            }
+        }
+
+        function syncFromPhoneInputs() {
+            const p = buildingPresets[state.buildingKey];
+            p.v1 = document.getElementById('valVolt1').value;
+            p.a1 = document.getElementById('valAmp1').value;
+            p.p1 = document.getElementById('valBar1').value;
+            p.v2 = document.getElementById('valVolt2').value;
+            p.a2 = document.getElementById('valAmp2').value;
+            p.p2 = document.getElementById('valBar2').value;
+            p.receiver = document.getElementById('inpReceptorNombre').value;
+            p.cargo = document.getElementById('inpReceptorCargo').value;
+
+            document.getElementById('pdfV1').textContent = p.v1;
+            document.getElementById('pdfA1').textContent = p.a1;
+            document.getElementById('pdfP1').textContent = p.p1;
+            document.getElementById('pdfV2').textContent = p.v2;
+            document.getElementById('pdfA2').textContent = p.a2;
+            document.getElementById('pdfP2').textContent = p.p2;
+            document.getElementById('pdfReceptorName').textContent = p.receiver;
+            document.getElementById('pdfReceptorCargo').textContent = p.cargo;
+
+            updateDefontanaPayload();
+        }
+
+        function addEventLog(msg) {
+            const container = document.getElementById('eventLogContainer');
+            if (!container) return;
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+            const div = document.createElement('div');
+            div.textContent = `${timeStr} - ${msg}`;
+            container.prepend(div);
+        }
+
+        // Live Clock
+        setInterval(() => {
+            const now = new Date();
+            const clk = document.getElementById('phoneClock');
+            if (clk) clk.textContent = now.toTimeString().split(' ')[0].substring(0, 5) + ' hrs';
+        }, 1000);
+
+        // Init on load
+        window.addEventListener('DOMContentLoaded', () => {
+            initSignature();
+            loadBuildingPreset('los_leones');
+        });
+    </script>
+</body>
+</html>

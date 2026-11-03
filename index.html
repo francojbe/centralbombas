@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central Bombas SpA · Suite de Demostración & Conector Defontana</title>
+    <meta name="theme-color" content="#0284c7">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .font-mono-tech { font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body class="min-h-full flex flex-col bg-slate-950 selection:bg-sky-500 selection:text-white">
+
+    <!-- Background glow decoration -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-sky-600/20 blur-[130px] rounded-full"></div>
+        <div class="absolute bottom-0 right-10 w-[500px] h-[300px] bg-cyan-600/10 blur-[120px] rounded-full"></div>
+    </div>
+
+    <!-- Header bar -->
+    <header class="relative z-10 border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md px-6 py-4">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-white px-3 py-1.5 rounded-lg shadow-sm">
+                    <img src="logo_centralbombas.png" alt="Central Bombas SpA" class="h-7 w-auto object-contain">
+                </div>
+                <div class="hidden sm:block">
+                    <h1 class="text-sm font-bold tracking-tight text-white">Central Bombas SpA</h1>
+                    <p class="text-xs text-slate-400 font-mono-tech">Suite de Demostración Operativa · Sepúlveda Leyton 3068</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Servidor Activo
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 flex-1 max-w-6xl mx-auto w-full px-6 py-12 flex flex-col justify-center">
+        
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20 mb-4">
+                <span>Efinnovation SpA</span>
+                <span>•</span>
+                <span>Conector Defontana ERP & PWA Terreno</span>
+            </div>
+            <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
+                Plataforma de Terreno & Conectividad ERP
+            </h2>
+            <p class="text-base sm:text-lg text-slate-400">
+                Seleccione la interfaz que desea ejecutar para la prueba de concepto o presentación en vivo.
+            </p>
+        </div>
+
+        <!-- 2 Main Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto w-full mb-10">
+            
+            <!-- Card 1: App Técnico -->
+            <a href="app-tecnico-centralbombas.html" class="group relative rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-900/40 border border-slate-800 hover:border-sky-500/60 p-7 transition-all duration-300 hover:shadow-2xl hover:shadow-sky-500/10 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-white transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" stroke-width="2"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-mono-tech px-2.5 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700">Móvil / PWA</span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-sky-400 transition-colors">
+                        App Técnico en Terreno
+                    </h3>
+                    <p class="text-sm text-slate-400 leading-relaxed mb-6">
+                        Diseñada para cuadrillas en subterráneos sin internet. Trabaja 100% offline (IndexedDB local), registra mediciones eléctricas/hidráulicas, captura firma del cliente y genera certificado PDF al instante.
+                    </p>
+
+                    <div class="space-y-2 text-xs text-slate-300 mb-6 font-mono-tech">
+                        <div class="flex items-center gap-2">
+                            <span class="text-emerald-400 font-bold">✔</span> Modo Subterráneo (-3 Offline)
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-emerald-400 font-bold">✔</span> Firma táctil del mayordomo en pantalla
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-emerald-400 font-bold">✔</span> Emisión de Certificado PDF timbrado
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-emerald-400 font-bold">✔</span> Cola de sincronización automática 4G
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-sky-400 text-sm font-semibold">
+                    <span>Iniciar App Técnico</span>
+                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- Card 2: Portal ERP Defontana -->
+            <a href="demo-central-bombas.html" class="group relative rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-900/40 border border-slate-800 hover:border-cyan-500/60 p-7 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500 group-hover:text-white transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <rect width="20" height="14" x="2" y="3" rx="2" stroke-width="2"/>
+                                <line x1="8" x2="16" y1="21" y2="21" stroke-width="2"/>
+                                <line x1="12" x2="12" y1="17" y2="21" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-mono-tech px-2.5 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700">Oficina / ERP</span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
+                        Portal Oficina · Defontana ERP
+                    </h3>
+                    <p class="text-sm text-slate-400 leading-relaxed mb-6">
+                        Panel de monitoreo administrativo en tiempo real. Visualiza las OTs sincronizadas, rebaja inventario de la Bodega Sepúlveda Leyton e inspecciona los payloads API inyectados a Defontana.
+                    </p>
+
+                    <div class="space-y-2 text-xs text-slate-300 mb-6 font-mono-tech">
+                        <div class="flex items-center gap-2">
+                            <span class="text-emerald-400 font-bold">✔</span> Recepción en tiempo real de OTs
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-emerald-400 font-bold">✔</span> Rebaja automática de stock en bodega
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-emerald-400 font-bold">✔</span> Inspección de JSON Defontana REST API
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-emerald-400 font-bold">✔</span> Panel de SLAs y trazabilidad de cuadrillas
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-cyan-400 text-sm font-semibold">
+                    <span>Abrir Portal Oficina</span>
+                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- Secondary link / Demo OT -->
+        <div class="text-center text-xs text-slate-500 font-mono-tech">
+            <span>¿Desea ver el prototipo técnico base?</span>
+            <a href="demo-terreno-ot.html" class="text-sky-400 hover:underline ml-1">Abrir demo-terreno-ot.html</a>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-slate-900 bg-slate-950 px-6 py-6 text-center text-xs text-slate-500">
+        <p>© 2026 Central Bombas SpA & Efinnovation SpA · Solución Tecnológica Integrada para Defontana ERP.</p>
+    </footer>
+
+</body>
+</html>

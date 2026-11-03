@@ -1,0 +1,321 @@
+Este contenido se generó con IA
+
+Charla sobre desarrollo de automatizaciones y procesos internos
+
+Hablante 1  (00:02)
+Vale. No na. No, pensé que te había mandado a ti como como bache. 
+
+Hablante 2  (00:23)
+Dijo que sí, conectar porque este es muy acelerado, entonces. 
+
+Hablante 1  (00:27)
+No tengo mail del que me haya dicho algo. Espera espera. 
+
+Hablante 2  (00:35)
+Estamos conectados. ¿Quién es tiene una reunión que gestiona ahora también y con su equipo entonces? Ah vale también se puede largar. 
+
+Hablante 2  (00:45)
+Por tanto, después de lo que yo creo que se realmente. 
+
+Hablante 1  (00:51)
+Dale perfecto al igual aprovechó de contarte un poquito nosotros lo que hacemos es hacer apoyar a las empresas con respecto a proceso automatizado. Para estas empresas que usan software de repente me comenta Francisco que te usan de fontana. De repente hacer integraciones hacemos desarrollo eso fue reintegraciones para eh, apoyar lo que sería el uso de estos foros administrativos y de repente a las personas que también terrenos. 
+
+Hablante 1  (01:18)
+De repente el proceso internos que tengan mucha demanda, se ocupe mucho excelente encargamos hacer esto. Nosotros no metemos un software empaquetado. No somos una empresa que tenemos ya un software ya empaquetado que le ofrecemos simplemente nos ajustamos a la a las necesidades de los clientes y hacemos esta hacemos ágil todo lo que son los procesos internos que vivia pueden provocar un cuello de botella y algún problema que los frenen el avanzar o que haga que la parte administrativa de repente se vea muy agobiada. 
+
+Hablante 1  (01:49)
+Entonces más que todo era, proponer de repente un una auditoría de ser así necesarias. A los procesos internos que usted consideran que se pueden mejorar. 
+
+Hablante 2  (02:03)
+Ya pero recuerdo un poco más de la empresa de esta empresa eres tú. 
+
+Hablante 1  (02:08)
+Somos si somos 3 desarrolladores. ¿3 ingenieros yo soy el fundador yo soy la persona que comenzó todo esto ya hace muy 3 años y medio aproximadamente yo soy geomático, pues te tengo un más interesa de seguridad de información y tengo 2 compañeros que vivía son parte del equipo. Que son desarrolladores. 
+
+Hablante 1  (02:32)
+Desarrolladores integradores más que todos nos enfocamos en integrar más que desarrollar aunque siempre hay que desarrollar algo para integrar esto. Hace estos enlaces esta comunicación vía API o vías o de repente la herramienta que sea necesaria o con la que se adapte con con la empresa que que lo requiera. 
+
+Hablante 2  (02:50)
+Estamos otras 2 personas son socios tuyos, son empleados como funcional. 
+
+Hablante 1  (02:55)
+No somos socios esto es una es una sociedad sé. 
+
+Hablante 2  (03:00)
+Sexto. Y en el fondo pueden meterse en cualquier área de la empresa de lo que necesiten de marketing? Sí, sí podrían desarrollar una mejora, pues continua. 
+
+Hablante 2  (03:14)
+Mediante sistemas que permitan el trabajo. 
+
+Hablante 1  (03:19)
+Sí sí. Sí, efectivamente nosotros, no habitualmente nos ponemos en contacto con una persona o operativa del área en que se requiere hacer esta mejora, entender el proceso que hoy de repente los cuellos de botella y proponer una solución tecnológica envase a ello. Nosotros nos enfocamos más que todo en eso desarrollamos en distintos lenguajes en Python este también deseamos desarrollar automatizaciones en esto estas herramientas de automatización como make. 
+
+Hablante 1  (03:48)
+Entonces sí la conoces en 8 n, eh, de repente así la empresa o usa lo que es la suite de Microsoft también tenemos conocimiento en lo que es power automate. Este para el desarrollo de repente si ya es bajo el mismo esquema organizacional este también tenemos eso esquil. Entonces abordamos ciertos puntos. 
+
+Hablante 1  (04:09)
+¿Perdón? 
+
+Hablante 2  (04:11)
+¿Qué hay si tiene la úl. 
+
+Hablante 1  (04:12)
+¿Cuántos kilos que te ahorramos todos a cierto esquí tenemos distintos. Distintos conocimientos iban ahí en caso de que requiera implementación de inteligencia artificial también manejamos este campo no lo solemos de ofrecer de primera mano a las empresas porque esto corre castos costos adicionales de consumo de todo que en y de licenciamiento que de repente la empresa no nos sino conoce muy bien el proceso entonces puede ocasionar más bien. 
+
+Hablante 2  (04:40)
+Un coche lleno de perfectamente blanco y. Té o tienen expertis son frustraco ¿No? O sea tienen expertis en aplicaciones pronto. 
+
+Hablante 2  (04:53)
+Pueden desarrollar aplica. 
+
+Hablante 1  (04:57)
+Sí miras no hacemos de ser nos haremos aplicaciones complejas completas simplemente somos integraciones pero si requieren un desarrollo puntual para un módulo específico de algo no solo podemos hacerle evaluación de lo que se requiere y si contamos con el esquí necesario lo lo vamos a plantear. Nos vemos a decir mira así cuando no. 
+
+Hablante 2  (05:13)
+Femaleranco pena que le está criticando Francisco dice que no me dejen quedar porque supera el número máximo. 
+
+Hablante 1  (05:21)
+Puede ser. Puede ser como ya estaba diseñada esta. Esta reunión dame 1 segundo. 
+
+Hablante 1  (05:29)
+Dame un di lamonto rapidito por meet y nos subimos a meet. Te parece? 
+
+Hablante 2  (05:34)
+Ya eso es si la voy a mandar a Francisco. 
+
+Hablante 1  (05:39)
+Dame segundo lago inmediatamente de mi correo personal porque no sé cómo. O está lloviendo durísimo. 
+
+Hablante 2  (05:49)
+Con Say. ¿En qué. No te creas que hay. 
+
+Hablante 1  (05:55)
+Se tapó llueve González. Ser un cuchillo solicitado extraño y y la lluvia decayendo. Daledina Francisco te me veo 1 segundo y estoy creando la. 
+
+Hablante 1  (06:27)
+Gonzalo cuál es tu correo para agregarte. 
+
+Hablante 2  (06:30)
+Es bugón con. 
+
+Hablante 1  (06:32)
+CNN. 
+
+Hablante 2  (06:34)
+Quirobra u i r o g kg. 
+
+Hablante 1  (06:50)
+Míratelo voy a enviar a ti para hacerlo más rápido y de ahí lo suyo. Y me parece. Sí, ya igual te voy a cancelar el chat esta la. 
+
+Hablante 1  (07:01)
+El link de la invitación por si la puedes mandar no sé si tienes ahí el WhatsApp en el. Ya ahí está el link este pues me voy para allá y directamente nos vemos allá. Lo que. 
+
+Hablante 1  (08:19)
+Hola. ¿Qué tal? Huchan. 
+
+Hablante 1  (08:21)
+Sí. Ya perfecto. Hola Francisco. 
+
+Hablante 2  (08:26)
+5. 
+
+Hablante 3  (08:27)
+Pon aquí por aquí estoy. 
+
+Hablante 1  (08:28)
+Deb perfecto muchas gracias. Sí se escucha. Disculpe, movimiento para acá pero allí dar un error allí de repente la creación de la de la cita que no permitió ingresar a más personas. 
+
+Hablante 1  (08:39)
+Perfecto. Ya, Francisco le comentaba yo gonzálon. Que bueno más o menos comentarle cómo trabajamos nosotros. 
+
+Hablante 1  (08:46)
+Nosotros somos un equipo de 3 desarrolladores pues yo soy el fundador de the stage de este equipo, nosotros desarrollamos automatizaciones, y ingeniería de software. Adaptadas a las necesidades de las compañías. Toma que todo para agilizar procesos. 
+
+Hablante 1  (09:02)
+Ahí le estaba comenzando le contaba comentando que nosotros nos adaptamos independientemente del aire que sea simplemente necesitamos una persona que esté en el campo. Que nos pueda de repente comentar el cuello de botella o la dificultad que quieren nosotros pues interactuar conversación en con ellos y por desarrollar una herramienta tecnológica que pueda agilizar de repente algún proceso o algún cuadro o tía que tenga en esa en ese flujo puntualmente. Nos nos hemos desarrollado a medida que nos vendemos un software empaquetado no tenemos un software para ofrecerle decirle tenemos este software nosotros nos integramos a los desarrollos que hoy día utilizan. 
+
+Hablante 1  (09:40)
+Entiendo que lo que me comentaste en el correo, usted usan de fontana. 
+
+Hablante 3  (09:45)
+Sí. 
+
+Hablante 1  (09:47)
+Nosotros podíamos encaso tan integrarnos por medioapi de fontana en una API pública la cual nos permite nos permitiría esta en este caso, consumir y enviar y recibir información. Entonces, de repente ahí viendo la dolencia que puedan tener los pollos ya que pueden tener se pueden hacer desarrollo personalizado o se pueden hacer flujo automático. Quizás para bajar reporting, para métricas. 
+
+Hablante 1  (10:12)
+Hay una infinidad de cosas que se pueden automatizar dependiendo de las necesidades del cliente en este caso. 
+
+Hablante 2  (10:19)
+Perfecto. Puede meterse en cualquier área marketing, lo que sea como que la empresa tenga un desafío. Analizar y proponer una solución que el cliente en este caso usted. 
+
+Hablante 2  (10:47)
+Momino previamente pensó que quiera desarrollar. 
+
+Hablante 3  (10:50)
+Sal music. Entonces, lo que va a pasar es que ayer, fran. 
+
+Hablante 1  (10:55)
+Franco. Franco Javier. 
+
+Hablante 3  (10:58)
+Franco Javier, en el correo que me contaban que shanghai con empresa de mantenimiento del terreno. Sí. ¿Qué empresa ok. 
+
+Hablante 1  (11:06)
+Mira estamos trabajando con una decha en una reunión mañana para precisar algunos temas con una empresa de aire acondicionado. De esto. Interciable. 
+
+Hablante 1  (11:13)
+Nosotros más que todos nos integramos porque viste que los los técnicos te suelen llevar cosas en papel para firmarlo en en los el en los lugares firmar que remente he recibido sacar la foto. Los otros con ellos estamos trabajando en un desarrollo pequeño donde ellos puedan tener una app en donde puedan cargar todo por ahí que sea offline porque hoy trabaje en bajo. Bajo bajo tierra, −2 − 3, puedan cargar toda la información y cuando suena a la superficie que logran tener conexión transmitir toda esa data a los software de la de la compañía. 
+
+Hablante 3  (11:46)
+El acceso es ocultamente lo que andábamos buscando por eso no sé si tenía algo para mostrar con respecto a eso. 
+
+Hablante 1  (11:52)
+Mirar con descliente no podría mostrarte porque hay datos pero puedo montarte en una demo si quieres este en un par en parte un día te puedo montar una demo sacártelo que tengo y mostrate un poco son desarrollos personalizados. No es un software empaquetado. A que tú me dices mira yo necesito que este no sé que el técnico cuando esté allá me mande te digo algo el la dirección. 
+
+Hablante 1  (12:16)
+El nombre cliente y me mande la foto y esta información precisa. Y yo temor y digo mira esto es lo que la persona va a ver todo lo que se va a transmitir como te he usado fontanas, podemos hacer la concatenación con los datos a través de API, que los recibos de repente en algún en software, simplemente para probar o si quieres que lo llene directamente en la base de datos, eso es conversable. Pero necesitaría primero tener como que dice información de cómo trabajas. 
+
+Hablante 1  (12:45)
+Para saber cómo puedo ayudarte por menos con estos clientes, es lo que te comentemos o menos será la. El problema es que yo tenía, o la necesidad de y eso fue la solución que nos suele dimos que les funcionó o que o sea que les que les pareció este apropiado hoy día yo estoy montando una demos a ello, un poco más funcional. En donde ellos van a evaluar si es lo que si se adapta a lo que ellos necesitan y siempre van a surgir cosas adicionales o quitar o poner cocidas más, pero en el fondo nosotros nos haremos un software como empaquetado y decir que mira este micro de ive innovation y sin integra con todos. 
+
+Hablante 1  (13:19)
+Nosotros hacemos desarrollo puntuales entonces desarrollamos en Python donde seríamos en en tipescript desarrollamos también en phps necesarios. Nos integramos vía appi en este caso de fontana tiene la API pública. Entendería ver que si tu plan de repente lo permite. 
+
+Hablante 1  (13:35)
+Nos conectamos o si tienes de repente algún espacio de democracia, también podemos hacer una unas pruebas. Pero, en en el fondo es esto nosotros no nos demostra a ofrecerte un software y es decir que mira te tengo en la llave mágica simplemente nos adaptamos a agilizamos los procesos así como ellos Gonzalo nos adaptamos al área si tu dolencia en este momento. Es el terreno. 
+
+Hablante 1  (13:56)
+Si son los técnicos del terreno, no sé porque tiene mucho papel porque de repente después pasar todo ese papel a la pata administrativa es un cuello de botella. Se puede agilizar de esta manera, software, pequeños software de integración, este quizás no lo quiere llevar a de fontana, pero te lo llevé repetir otro software interno que tengas tu empresa. Y tengas ahí todo más controlado. 
+
+Hablante 3  (14:17)
+Peífroco cuéntame una cosa, cuánto tiempo lleva usted en esto. 
+
+Hablante 1  (14:19)
+Eso damos 3 años y medio acaba trabajando en automatizando. 
+
+Hablante 3  (14:22)
+¿Cuántos clientes tienen mensuales activos con contrato o no sé cómo funciona? Pero quizá manteniendo permanente. 
+
+Hablante 1  (14:29)
+No, nosotros hacemos desarrollos a medida que ya por lo general son una empresa mediana que tiene su área técnica y ellos se encargan de mantener su sistema. No ofrecemos por lo general. Ahora si el cliente lo necesita pudiésemos tener de repente un especial de contrato, pero por lo general nosotros hacemos un una integración y ofrecemos el paquete completo desde ambos código entregamos este lo que sería la documentación y ya el área técnica de la compañía si es que la tiene, se encargan de hacerle mantención y en caso de requerir el conflicto. 
+
+Hablante 3  (15:01)
+Contróyecto construye el edificio para las mantececiones no van por tu cuenta no entrega y todas las especificaciones técnicas para que alguien mantener lo haga las mante. 
+
+Hablante 1  (15:08)
+El repochi. De esa manera hemos venido trabajando y se nos ha ido se nos ha dado bien porque no creamos ese enlace dé de que sea necesario de repente nuestra un contrato de por medio o de repente lanzarse al futuro. 
+
+Hablante 3  (15:26)
+Perfecto. Oye y cuéntame y. Ya, bien me cae claro. 
+
+Hablante 3  (15:30)
+Yo un integración como esta como la que le está diciendo el de los aire acondicionado más menos. De cuánto estamos hablando para entender porque antes de la d e m y toda la guestón va a ser si estábamos el mismo idioma nuevo? 
+
+Hablante 1  (15:40)
+Mira esto dependerá entonces lo que quieres montar si lo quieres en android, quieres un desarrollo android pequeña integración de una app android que se conecte con tu demontana. Mira esto nuestro pueblo general lo vemos por el la volumetría de datos que se pasan de allá a no sé qué tanto cliente o que tanta data necesites tú porque estoy que adaptar todo el sistema para que pueda soportar toda esta transacción. Es te pero mira yo diría en pesos. 
+
+Hablante 1  (16:08)
+Por lo menos con este cliente estamos trazando un uf pero empezamos a ser fácilmente un 800900000 pesos esta pequeña integración. Y esto viviría en tu servidor. Ya esto no no va en mi plataforma y no va a mi servidores. 
+
+Hablante 3  (16:22)
+Esto te lo podéis fondo y nutrindo si hay que integrar la avates por cobrarlo. Claro, quiero integrar la. Esto es porque está bien de fontana funciona para ciertas cosas, pero pausa a lo mejor no como. 
+
+Hablante 1  (16:36)
+Es exactamente la idea de todo esto es que nosotros podemos agilizar este cuello en distintas áreas. Hoy día, lo que te comenta el ejemplo más porque lo tengo aquí en la retina que mañana tengo en la reunión, es este tema con con esta empresa. Pero fácilmente esto me dice ya franco mira aparte absolutamente necesitamos pasarte a otra información que no llegue a casa si no que llegue a este otro lado, o tengo este problema muy puntual, necesito ver cómo lo cómo lo hago más ágil. 
+
+Hablante 1  (17:00)
+Ahí nosotros entramos de herramienta conversada, de repente de repente uno de nuestros compañeros que sea de repente más específicos en ese. En el específico como digo, son 3 entonces, cualquiera de los 3 de repente puede aportar a una solución. Y ya conversa una vez conversada la solución, nosotros entramos a desarrollar algo y mira todo esto, no nosotros conversamos vemos cuáles son las necesidades proponemos y ayudarán. 
+
+Hablante 1  (17:25)
+Ahora, lo que tú me comentas de dando un monto, pero es porque no sé es su puntual de repente pasar. Esa información del entero a a esta otra aplicación de la oficina para evitar el papel. Y te doy un precio si fue más o menos para que tengas una idea de cómo solo trabajamos. 
+
+Hablante 1  (17:43)
+Ahora tío, si ocúnano tiene un área técnica y no tiene servidores propios y todos los demás nosotros podemos o asesorarnos a ustedes de si le mira con no sé. Arriesgas de TV s o arenas de esta esta este pequeño servidor y nosotros, acondicionamos para que corra y tu sistema. La mayoría de estos sistemas necesitan un servidor, no, no corren en un PC. 
+
+Hablante 1  (18:01)
+La IA es que corran mucho. 
+
+Hablante 3  (18:04)
+Una mensualidad en un servidor. 
+
+Hablante 1  (18:05)
+O sea si tienen ustedes infraestructuras no. Ejemplo si tú tienes tú de tus servidores o sea si tienes una actividad con tu servidor de tu pueblo en tus en tu propio tuyo, puede ser puede ser tanto en tu dependencia como en la nube, pues lo podemos ocupar parte de ese recurso y montar el sistema y crear una máquina virtual o crear un contenedor no sé si manejan los términos y hacer kecos que socorren allí. No se los podemos hacer esa configuración, se tap. 
+
+Hablante 1  (18:33)
+Ahora si no lo tienen, podemos asesorarlo y decirle mira. Esto es lo mínimo que requiere para que este escribe o esta aplicación que va a vivir en el en el no sé si va a ser android o lo que va a ser vive en tu teléfono, pero también tiene que vivir también. Va a tener que procesar información. 
+
+Hablante 1  (18:48)
+Entonces va a necesitar algo escuchando algún demonio en el otro lado que vaya capturando información y haga el traspaso de la edad. 
+
+Hablante 3  (18:55)
+Mira me hace más ruido de 2 cosas, primero, lo que siempre pasa con la empresa tecnológica pequeña o de poco tiempo que tú lo sabes si el día mañana te sale una Vega en Miami y que hay para Miami y dijeron. Lo bueno que pasa de toda la información y ya un poco como dice. Tú no es la master y no resuelto usted, pero por otro lado, claro, si el sistema requiere de una persona que esté al otro lado, eh, revisándolo. 
+
+Hablante 3  (19:20)
+Por qué pasan cosas o sea con estas cosas pasan cosas permanentemente, se quiso cargo que no se cargó. Dígeme una vuelta ya te entendí donde hay que lo que un poco tu sistema o gozalo en nuestro cargado externo, digamos de todo lo que tecnología? Entonces, seguramente si conversamos y tenemos alguna duda, si ha comunicado contigo. 
+
+Hablante 3  (19:41)
+No sé si Gonzalo tenía alguna duda ahora o la conversación. 
+
+Hablante 2  (19:46)
+¿Qué alumnos? Esta aplicación que estaba ofreciendo a la empresa de aires, no está desarrollado. Habría que un vaso sentarte con ello entender su requerimiento y hacer algo la medida. 
+
+Hablante 1  (20:03)
+Hay un prototipo pero no está productiva. Resetea y se adapta a la intensidad. 
+
+Hablante 2  (20:10)
+Si tú buscaras una empresa de mantenimiento o 24 empresas, en el fondo a cada uno le das ofrecer un prototipo. 
+
+Hablante 1  (20:18)
+Es que año. Es que hay una base. 
+
+Hablante 2  (20:21)
+No hay que tengas un modelo que sea usados que tengas una recurrencia y en el fondo venga venga con un soporte detrás. 
+
+Hablante 1  (20:29)
+No. No hay un sas simplemente ahí una base porque obviamente hemos trabajado con casi todas estas empresas de servicio tienen una base son la base es similar, lo que cambiarámente unos campos de integración que nosotros tenemos que obviamente adaptar porque no son las mismas la misma información que tú necesitas pasar para allá que la que necesita la otra empresa. Entonces por eso que yo hablo de prototipos porque tengo una base en donde yo tengo te muestro algo, pasa de Atocha y ves como llega. 
+
+Hablante 1  (20:54)
+Pero esto no es necesariamente es la información que tú necesitas pasar. Entonces, ahí donde nosotros entramos con el cliente conversar mirando yo necesito este campo este campo pues otro campo pues otro campo y tenemos que validarlo contratarlo porque no todas las empresas usan el mismo software administración contable. Uno usan de fontana, otro que usan otro. 
+
+Hablante 1  (21:10)
+Entonces ver cómo la otra contra parte recibe esa data y puede hacer la integración. Por eso, no no es un sas. No es un software empateado. 
+
+Hablante 2  (21:21)
+Es el voto en desarrollo de medida, pero en fondos se vende una sola i y ahí la carga se arregla en el camino. 
+
+Hablante 1  (21:28)
+Sirve que por lo general es mira, son son destacables tan pequeños, porque es una integración más que un desarrollo de 0. Por qué ya tú con tu potencia, tanto en tu software que tienes en hoy día en tu empresa? Eso simplemente hacemos como es como una especie de extensión. 
+
+Hablante 1  (21:45)
+Un adont, no sé un. Una integración. Un software que se integra en algunos casos, es un desarrollo android en otros casos simplemente como un pequeño desarrollo un web. 
+
+Hablante 1  (21:57)
+Después hacer lo que es la conexión vía a π a tu software no necesitas de repente un formulario en un navegador que vaya y llene la información que tú necesitas es suficiente. Entonces ahí donde joel en donde se entro y se conversa con el cliente para ver realmente qué necesita si de repente me dice no mira, necesito las apps android porque esto por esto por esto, bueno sí, pero si no necesarios simplemente hace un desarrollo web. En donde veis tú tengas todo simplemente. 
+
+Hablante 1  (22:20)
+Te conecta la URL, pasa la información que necesita y eso llega al otro lado o por si está de repente cruzar información. Sube un archivo excel y aquí internamente tengo mi software que procesa todo y vacía la data hasta adónde lo necesita o sea, esto va a ser dependiendo de las necesidades de alguien. 
+
+Hablante 3  (22:41)
+Perfecto. Oye, yo tengo una reunión hoy hemos calculado menos llamo más o − 35. Yo estoy claro. 
+
+Hablante 3  (22:48)
+Puede funcionar déjame darle una vuelta. Yo lo personal pensé que había algo como, como se podía modificar pero, pero déjame dar una vuelta con Google. Para ver si hacemos una vez seguimos avanzando. 
+
+Hablante 1  (23:04)
+Ya en afecto no hay problema. 
+
+Hablante 3  (23:06)
+Te agrego tiempo fuiste súper claro, así que yo creo que podría funcionar. 
+
+Hablante 1  (23:11)
+Perfecto cualquier cosa, tama. 
+
+Hablante 3  (23:14)
+¿Qué pasa la técnica de Tela. 
+
+Hablante 1  (23:17)
+Ya afecto cualquier inquietud te queda Gonzalo. Me comenta y logramos. Gracias. 
+
+Hablante 3  (23:24)
+Muchas gracias. 

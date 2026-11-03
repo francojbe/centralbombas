@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demostrador en Vivo: OT Terreno Offline + Conector ERP Defontana | Efinnovation</title>
+    <meta name="robots" content="noindex, nofollow">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0b1120;
+            color: #f8fafc;
+        }
+        .font-mono-tech {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        /* Phone Mockup Frame */
+        .phone-frame {
+            width: 100%;
+            max-width: 420px;
+            border: 10px solid #1e293b;
+            border-radius: 38px;
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            position: relative;
+        }
+        .phone-notch {
+            width: 130px;
+            height: 22px;
+            background: #1e293b;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            margin: 0 auto;
+        }
+        canvas#sigCanvas {
+            touch-action: none;
+            cursor: crosshair;
+        }
+        @keyframes pulseSubtle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.55; }
+        }
+        .animate-pulse-subtle {
+            animation: pulseSubtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        /* Print Styles for Official PDF Certificate */
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #0f172a !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only-container {
+                display: block !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-sky-500 selection:text-white">
+
+    <!-- TOP DEMO CONTROL BAR (FOR FRANCO DURING GOOGLE MEET) -->
+    <header class="no-print sticky top-0 z-50 bg-slate-950/95 backdrop-blur border-b border-slate-800 px-4 py-2.5">
+        <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
+            <!-- Left: Brand & Client Switcher -->
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="text-xs font-bold tracking-wider uppercase text-slate-300">Efinnovation · Demo Terreno + ERP</span>
+                </div>
+
+                <div class="flex items-center gap-1.5 bg-slate-900 p-1 rounded-lg border border-slate-800">
+                    <button id="btnBrandGrado" onclick="switchClientBrand('gradoclima')" class="px-3 py-1 rounded-md text-xs font-semibold transition bg-sky-600 text-white shadow">
+                        🔥 Grado Clima SpA (Defontana)
+                    </button>
+                    <button id="btnBrandCentral" onclick="switchClientBrand('centralbombas')" class="px-3 py-1 rounded-md text-xs font-semibold transition text-slate-400 hover:text-white">
+                        💧 Central Bombas SpA
+                    </button>
+                </div>
+            </div>
+
+            <!-- Center: Subterranean / 4G Connectivity Simulator -->
+            <div class="flex items-center gap-3 bg-slate-900/90 border border-slate-700/80 rounded-xl px-3.5 py-1.5">
+                <span class="text-xs font-medium text-slate-400">Entorno del Técnico:</span>
+                <button id="btnToggleNetwork" onclick="toggleNetworkMode()" class="flex items-center gap-2 px-3 py-1 rounded-lg text-xs font-bold transition bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30">
+                    <span id="netDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <span id="netLabel">SUBTERRÁNEO -2 (SIN SEÑAL 4G · MODO OFFLINE)</span>
+                </button>
+                <button id="btnForceSync" onclick="simulateAscensorSync()" class="px-3 py-1 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-sm flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
+                    Subir al Ascensor (Recuperar 4G y Sincronizar)
+                </button>
+            </div>
+
+            <!-- Right: Quick Actions -->
+            <div class="flex items-center gap-2">
+                <button onclick="resetDemoScenario()" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800 transition">
+                    Reiniciar Demo
+                </button>
+                <button onclick="switchRightTab('pdf'); setTimeout(() => window.print(), 250);" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    Imprimir PDF Oficial
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN SPLIT WORKSPACE -->
+    <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- =====================================================================
+             LEFT COLUMN (5 COLS): TECHNICIAN MOBILE PWA SIMULATOR (registbar core)
+             ===================================================================== -->
+        <section class="no-print lg:col-span-5 flex flex-col items-center">
+            <div class="w-full max-w-[420px] mb-3 flex items-center justify-between text-xs text-slate-400 px-1">
+                <span class="font-semibold text-slate-300 flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    1. Vista del Técnico en Terreno (PWA / Android)
+                </span>
+                <span class="font-mono-tech text-[11px] text-slate-500">Motor: OfflineService.ts + IndexedDB</span>
+            </div>
+
+            <!-- PHONE DEVICE FRAME -->
+            <div class="phone-frame flex flex-col max-h-[820px]">
+                <!-- Top Status Bar & Notch -->
+                <div class="bg-slate-900 text-white px-5 pt-1 pb-2 flex items-center justify-between text-[11px] font-medium">
+                    <span id="phoneClock">17:05</span>
+                    <div class="phone-notch"></div>
+                    <div id="phoneSignalBadge" class="flex items-center gap-1 text-amber-400 font-semibold">
+                        <span>Sin Red</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m-3.536-3.536a4 4 0 010-5.656m-7.072 7.072a4 4 0 010-5.656m-3.536 9.192a9 9 0 010-12.728"/></svg>
+                    </div>
+                </div>
+
+                <!-- Dynamic Offline / Online Banner inside Phone -->
+                <div id="phoneNetBanner" class="bg-amber-500 text-slate-950 px-3.5 py-1.5 text-[11px] font-bold flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <span class="inline-block w-2 h-2 rounded-full bg-slate-950 animate-ping"></span>
+                        <span id="phoneNetBannerText">MODO SUBTERRÁNEO · Guardado Local Activo</span>
+                    </div>
+                    <span id="phoneQueueCounter" class="bg-slate-950/20 px-1.5 py-0.5 rounded text-[10px] font-mono-tech">Cola: 1 OT</span>
+                </div>
+
+                <!-- App Header (Branded for Grado Clima / Central Bombas) -->
+                <div id="mobileAppHeader" class="bg-slate-900 text-white px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span id="mobBrandBadge" class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-sky-500 text-white">GRADO CLIMA</span>
+                            <span class="text-xs text-slate-400 font-mono-tech" id="mobOtNumber">#OT-8842</span>
+                        </div>
+                        <h2 id="mobBrandSubtitle" class="text-sm font-bold mt-0.5 text-slate-100">Terreno · Calderas & Salas de Bombas</h2>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] text-slate-400 block">Técnico Turno</span>
+                        <span class="text-xs font-semibold text-emerald-400">R. Valdivia · Camioneta #03</span>
+                    </div>
+                </div>
+
+                <!-- Scrollable Mobile Form Body -->
+                <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50 text-slate-800">
+
+                    <!-- STEP 1: SELECT BUILDING / COMMUNITY -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                            1. Comunidad / Edificio Asignado
+                        </label>
+                        <select id="selectCommunity" onchange="loadPresetOrder(this.value)" class="w-full text-xs font-semibold bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                            <option value="parque">Edificio Parque Las Condes (Admin: Edipro) · Subterráneo -2</option>
+                            <option value="mirador">Condominio Mirador Lo Campino (Admin: ComunidadFeliz)</option>
+                            <option value="paseo">Centro Comercial Paseo Estación · Sala Presurización</option>
+                        </select>
+                        <div class="mt-2 grid grid-cols-2 gap-2 text-[11px] text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-200/70">
+                            <div><span class="text-slate-400">RUT Cliente:</span> <strong id="infoRut" class="font-mono-tech">53.318.920-4</strong></div>
+                            <div><span class="text-slate-400">Modalidad:</span> <strong id="infoModalidad" class="text-sky-700">Convenio + Emergencia 24/7</strong></div>
+                            <div class="col-span-2"><span class="text-slate-400"> instalación:</span> <strong id="infoEquipo">Sala de Calderas Torre A (2 Calderas Anwo + Bombas)</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: TELEMETRY & MEASUREMENTS -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">2. Medición de Parámetros</span>
+                            <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Norma SEC / fabricante</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-[10px] text-slate-500 font-medium mb-1">Presión (Bar)</label>
+                                <input id="inpPresion" type="number" step="0.1" value="2.2" oninput="refreshAllOutputs()" class="w-full text-xs font-bold font-mono-tech text-center bg-slate-50 border border-slate-300 rounded-lg py-1.5 text-slate-900">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-500 font-medium mb-1">Temp. ACS (°C)</label>
+                                <input id="inpTemp" type="number" step="1" value="58" oninput="refreshAllOutputs()" class="w-full text-xs font-bold font-mono-tech text-center bg-slate-50 border border-slate-300 rounded-lg py-1.5 text-slate-900">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-500 font-medium mb-1">Corriente (A)</label>
+                                <input id="inpAmperaje" type="number" step="0.1" value="8.4" oninput="refreshAllOutputs()" class="w-full text-xs font-bold font-mono-tech text-center bg-slate-50 border border-slate-300 rounded-lg py-1.5 text-slate-900">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: INTERACTIVE CHECKLIST -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">
+                            3. Pauta Técnica de Inspección
+                        </span>
+                        <div id="checklistContainer" class="space-y-2 text-xs">
+                            <!-- Dynamically populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: SPARE PARTS & DEFONTANA SKU PICKER -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">4. Repuestos Utilizados (Bodega Móvil)</span>
+                            <span class="text-[10px] font-mono-tech text-sky-700 bg-sky-50 px-1.5 py-0.5 rounded border border-sky-200">Sync SKU Defontana</span>
+                        </div>
+                        <div id="partsContainer" class="space-y-2">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="mt-3 pt-2.5 border-t border-slate-200 flex items-center justify-between text-xs">
+                            <span class="font-semibold text-slate-600">Total Neto OT (Sin IVA):</span>
+                            <span id="mobTotalNeto" class="text-sm font-extrabold font-mono-tech text-slate-900">$147.500</span>
+                        </div>
+                    </div>
+
+                    <!-- STEP 5: PHOTO EVIDENCE & OCR -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">5. Evidencia Fotográfica (Subterráneo)</span>
+                            <label class="cursor-pointer text-[10px] font-bold text-sky-600 hover:text-sky-700 flex items-center gap-1">
+                                <input type="file" accept="image/*" class="hidden" onchange="handleCustomPhotoUpload(event)">
+                                + Subir foto cámara
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="relative rounded-lg overflow-hidden border border-slate-200 bg-slate-900 p-2 text-white">
+                                <div class="text-[10px] font-mono-tech text-emerald-400">FOTO 1 · ANTES</div>
+                                <div class="text-[11px] font-semibold mt-0.5">Fuga en Sello & Alivio</div>
+                                <div class="text-[9px] text-slate-400 mt-1">16:42 hrs · GPS Verificado</div>
+                            </div>
+                            <div class="relative rounded-lg overflow-hidden border border-slate-200 bg-slate-900 p-2 text-white">
+                                <div class="text-[10px] font-mono-tech text-sky-400">FOTO 2 · DESPUÉS</div>
+                                <div id="customPhotoLabel" class="text-[11px] font-semibold mt-0.5">Manómetro estable 2.2 bar</div>
+                                <div class="text-[9px] text-slate-400 mt-1">17:04 hrs · Operativo OK</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 6: OBSERVATIONS & TOUCH SIGNATURE CANVAS -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                            6. Diagnóstico y Recepción Conforme (Conserjería)
+                        </span>
+                        <textarea id="inpObservacion" rows="2" oninput="refreshAllOutputs()" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-800 mb-2">Se reemplaza válvula de alivio 3 bar y kit de sello mecánico en bomba recirculadora #1. Sala de calderas queda operando en automático sin fugas, presión estabilizada en 2.2 bar y ACS en 58°C.</textarea>
+
+                        <div class="grid grid-cols-2 gap-2 mb-2">
+                            <div>
+                                <label class="block text-[10px] text-slate-500 font-medium">Recibe en Edificio:</label>
+                                <input id="inpReceptor" type="text" value="Juan Carlos Muñoz" oninput="refreshAllOutputs()" class="w-full text-xs font-semibold bg-slate-50 border border-slate-300 rounded px-2 py-1 text-slate-900">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-500 font-medium">Cargo / Turno:</label>
+                                <input id="inpCargoReceptor" type="text" value="Mayordomo / Jefe Conserjería" oninput="refreshAllOutputs()" class="w-full text-xs font-semibold bg-slate-50 border border-slate-300 rounded px-2 py-1 text-slate-900">
+                            </div>
+                        </div>
+
+                        <!-- Touch Signature Canvas -->
+                        <div class="border border-dashed border-slate-400 rounded-lg bg-slate-50 p-1.5">
+                            <div class="flex items-center justify-between text-[10px] text-slate-500 px-1 mb-1">
+                                <span>Firma digital en pantalla del celular:</span>
+                                <div class="flex gap-2">
+                                    <button type="button" onclick="drawSampleSignature()" class="text-sky-600 font-semibold hover:underline">Simular Firma</button>
+                                    <button type="button" onclick="clearSignature()" class="text-rose-600 font-semibold hover:underline">Limpiar</button>
+                                </div>
+                            </div>
+                            <canvas id="sigCanvas" width="330" height="85" class="w-full h-[85px] bg-white rounded border border-slate-200"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- SUBMIT BUTTON INSIDE PHONE -->
+                    <button id="btnMobileSubmit" onclick="handleMobileSaveOrder()" class="w-full py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider text-white bg-sky-600 hover:bg-sky-500 shadow-lg transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7"/></svg>
+                        <span id="btnMobileSubmitText">Cerrar OT en Subterráneo (Guardar en Cola Local)</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             RIGHT COLUMN (7 COLS): OFFICE MONITOR, DEFONTANA API & PDF REPORT
+             ===================================================================== -->
+        <section class="lg:col-span-7 flex flex-col space-y-4">
+
+            <!-- Right Panel Navigation Tabs -->
+            <div class="no-print bg-slate-900 border border-slate-800 p-1.5 rounded-xl flex flex-wrap items-center justify-between gap-2">
+                <div class="flex flex-wrap items-center gap-1">
+                    <button id="tabBtnErp" onclick="switchRightTab('erp')" class="px-3.5 py-2 rounded-lg text-xs font-bold transition bg-sky-600 text-white shadow flex items-center gap-2">
+                        <span>⚡ 2. Puente API Defontana & Cola Offline</span>
+                    </button>
+                    <button id="tabBtnPdf" onclick="switchRightTab('pdf')" class="px-3.5 py-2 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white flex items-center gap-2">
+                        <span>📄 3. Certificado PDF (Edipro / ComunidadFeliz)</span>
+                    </button>
+                    <button id="tabBtnBoard" onclick="switchRightTab('board')" class="px-3.5 py-2 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white flex items-center gap-2">
+                        <span>📊 4. Tablero de Cuadrillas 24/7</span>
+                    </button>
+                </div>
+                <div id="syncStatusPill" class="px-3 py-1 rounded-full text-[11px] font-mono-tech font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                    is_synced: 0 (En teléfono del técnico)
+                </div>
+            </div>
+
+            <!-- =================================================================
+                 TAB 1: DEFONTANA ERP INTEGRATION & OFFLINE SYNC ENGINE
+                 ================================================================= -->
+            <div id="panelErp" class="no-print space-y-4">
+
+                <!-- Visual Pipeline Step-by-Step -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-base font-bold text-white">Flujo Automático Terreno → Oficina (Cero Digitación Manual)</h3>
+                            <p class="text-xs text-slate-400">Así viaja la orden desde el subterráneo del edificio directo a <strong class="text-sky-400" id="erpNameLabel">Defontana ERP</strong> cuando el técnico recupera señal.</p>
+                        </div>
+                        <button onclick="simulateAscensorSync()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow flex items-center gap-1.5">
+                            <span>Probar Sincronización 4G Ahora</span>
+                        </button>
+                    </div>
+
+                    <!-- 3-Step Pipeline Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <!-- Step A: Local Queue -->
+                        <div id="stepCardLocal" class="p-3.5 rounded-xl border border-amber-500/50 bg-amber-500/5">
+                            <div class="flex items-center justify-between text-xs font-bold text-amber-300 mb-1">
+                                <span>PASO 1 · TELÉFONO (OFFLINE)</span>
+                                <span class="font-mono-tech text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20">Dexie IndexedDB</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Guarda checklist, fotos y firma en el teléfono aunque esté en el piso -2 sin señal. No se pierde ninguna orden.
+                            </p>
+                            <div id="stepLocalBadge" class="mt-2.5 text-[11px] font-mono-tech text-amber-300 font-semibold">
+                                ● 1 OT retenida en memoria local
+                            </div>
+                        </div>
+
+                        <!-- Step B: Defontana Inventory & Billing -->
+                        <div id="stepCardDefontana" class="p-3.5 rounded-xl border border-slate-800 bg-slate-950/60">
+                            <div class="flex items-center justify-between text-xs font-bold text-sky-400 mb-1">
+                                <span>PASO 2 · API DEFONTANA</span>
+                                <span class="font-mono-tech text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20">REST JSON</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Rebaja los repuestos de la <strong>Bodega Camioneta #03</strong> y deja creada la <strong>Nota de Venta / Pre-Factura</strong> en Defontana.
+                            </p>
+                            <div id="stepDefontanaBadge" class="mt-2.5 text-[11px] font-mono-tech text-slate-500">
+                                ○ Esperando señal 4G del técnico...
+                            </div>
+                        </div>
+
+                        <!-- Step C: Community Manager Notification -->
+                        <div id="stepCardAdmin" class="p-3.5 rounded-xl border border-slate-800 bg-slate-950/60">
+                            <div class="flex items-center justify-between text-xs font-bold text-emerald-400 mb-1">
+                                <span>PASO 3 · ADMINISTRADOR</span>
+                                <span class="font-mono-tech text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20">PDF + Correo</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Despacha el Certificado PDF firmado al administrador del edificio (<strong>Edipro / ComunidadFeliz</strong>) para cobro inmediato.
+                            </p>
+                            <div id="stepAdminBadge" class="mt-2.5 text-[11px] font-mono-tech text-slate-500">
+                                ○ Pendiente de sincronización...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Impact Cards in Defontana (What Sara saves in administrative hours) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Card 1: Inventory Deduction -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-sky-400">Impacto #1 en Defontana · Inventario</span>
+                            <span class="text-[11px] font-mono-tech text-slate-400">POST /api/v1/Inventory/Movement</span>
+                        </div>
+                        <div class="text-xs text-slate-300 space-y-1.5">
+                            <div class="flex justify-between py-1 border-b border-slate-800">
+                                <span class="text-slate-400">Bodega Origen:</span>
+                                <span class="font-semibold text-white">BODEGA-MOVIL-03 (Furgón R. Valdivia)</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-slate-800">
+                                <span class="text-slate-400">Centro de Negocios:</span>
+                                <span class="font-semibold text-emerald-400" id="erpCostCenter">CC-201 · Mantención Salas de Calderas</span>
+                            </div>
+                            <div id="erpPartsSummaryList" class="pt-1 space-y-1 font-mono-tech text-[11px] text-slate-300">
+                                <!-- Filled by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Pre-Invoice / Sale Order -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Impacto #2 en Defontana · Facturación</span>
+                            <span class="text-[11px] font-mono-tech text-slate-400">POST /api/v1/SaleOrder</span>
+                        </div>
+                        <div class="text-xs text-slate-300 space-y-1.5">
+                            <div class="flex justify-between py-1 border-b border-slate-800">
+                                <span class="text-slate-400">Cliente / Comunidad:</span>
+                                <span class="font-semibold text-white" id="erpClientName">Comunidad Edificio Parque Las Condes</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-slate-800">
+                                <span class="text-slate-400">RUT Facturación:</span>
+                                <span class="font-mono-tech font-bold text-sky-300" id="erpClientRut">53.318.920-4</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-slate-800">
+                                <span class="text-slate-400">Monto Neto + IVA (19%):</span>
+                                <span class="font-mono-tech font-extrabold text-emerald-400" id="erpTotalBruto">$175.525 CLP</span>
+                            </div>
+                            <div class="pt-1 flex items-center justify-between">
+                                <span class="text-[11px] text-slate-400">Estado en ERP:</span>
+                                <span id="erpDocStatus" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300">En Cola Local del Celular</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live JSON Payload Inspector for Defontana API -->
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+                            <span class="text-xs font-bold text-slate-200">Payload Técnico en Vivo hacia API Defontana (Generado automáticamente por la App)</span>
+                        </div>
+                        <span class="text-[11px] font-mono-tech text-slate-500">UTF-8 · Idempotent UUID</span>
+                    </div>
+                    <pre id="jsonPayloadViewer" class="font-mono-tech text-[11px] text-sky-300 bg-slate-900/90 p-3.5 rounded-xl border border-slate-800 overflow-x-auto max-h-[260px] leading-relaxed"></pre>
+                </div>
+            </div>
+
+            <!-- =================================================================
+                 TAB 2: PRINTABLE PDF CERTIFICATE FOR ADMINISTRATORS (EDIPRO / COMUNIDADFELIZ)
+                 ================================================================= -->
+            <div id="panelPdf" class="hidden print-only-container">
+                <div class="bg-white text-slate-900 rounded-2xl shadow-2xl border border-slate-200 p-6 md:p-8 max-w-[820px] mx-auto">
+
+                    <!-- PDF Top Header -->
+                    <div class="flex flex-wrap items-start justify-between gap-4 pb-5 border-b-2 border-slate-900">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span id="pdfBrandPill" class="px-2.5 py-1 rounded bg-sky-700 text-white font-extrabold text-xs tracking-wider uppercase">GRADO CLIMA SPA</span>
+                                <span class="text-xs font-mono-tech text-slate-500">SERVICIO TÉCNICO & INGENIERÍA TÉRMICA</span>
+                            </div>
+                            <h1 id="pdfDocTitle" class="text-xl font-extrabold text-slate-900 mt-2">CERTIFICADO DE MANTENCIÓN Y ORDEN DE TRABAJO</h1>
+                            <p id="pdfCompanyAddress" class="text-xs text-slate-600 mt-0.5">Camino del Cerro 1616, Valle Lo Campino, Quilicura · Emergencias 24/7: +56 9 8804 7611 · contacto@gradoclima.cl</p>
+                        </div>
+                        <div class="text-right bg-slate-100 px-4 py-2.5 rounded-xl border border-slate-300">
+                            <div class="text-[10px] font-bold uppercase text-slate-500">Folio Orden Digital</div>
+                            <div id="pdfFolio" class="text-lg font-extrabold font-mono-tech text-slate-900">#OT-2026-8842</div>
+                            <div id="pdfSyncStamp" class="text-[10px] font-semibold text-emerald-700">✓ Vinculado a Defontana ERP</div>
+                        </div>
+                    </div>
+
+                    <!-- Building & Client Metadata Table -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 my-5 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
+                        <div>
+                            <span class="text-slate-500 block text-[10px] uppercase font-bold">Comunidad / Cliente</span>
+                            <strong id="pdfCommunityName" class="text-slate-900">Comunidad Edificio Parque Las Condes</strong>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block text-[10px] uppercase font-bold">RUT Comunidad</span>
+                            <strong id="pdfCommunityRut" class="font-mono-tech text-slate-900">53.318.920-4</strong>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block text-[10px] uppercase font-bold">Plataforma Administración</span>
+                            <strong id="pdfAdminPlatform" class="text-sky-700">Respaldo Edipro / ComunidadFeliz</strong>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block text-[10px] uppercase font-bold">Fecha y Hora Cierre</span>
+                            <strong id="pdfDateTime" class="font-mono-tech text-slate-900">30-10-2026 · 17:05 hrs</strong>
+                        </div>
+                        <div class="col-span-2">
+                            <span class="text-slate-500 block text-[10px] uppercase font-bold">Instalación Intervenida</span>
+                            <strong id="pdfEquipment" class="text-slate-900">Sala de Calderas Torre A (Subterráneo -2)</strong>
+                        </div>
+                        <div class="col-span-2">
+                            <span class="text-slate-500 block text-[10px] uppercase font-bold">Técnico Especialista Asignado</span>
+                            <strong class="text-slate-900">Rodrigo Valdivia · Móvil #03 (Certificación SEC Vigente)</strong>
+                        </div>
+                    </div>
+
+                    <!-- Measured Telemetry Row -->
+                    <div class="mb-5">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-2">1. Parámetros Operacionales Registrados en Terreno</h3>
+                        <div class="grid grid-cols-3 gap-3 text-center">
+                            <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50">
+                                <div class="text-[10px] text-slate-500 font-bold uppercase">Presión Circuito</div>
+                                <div id="pdfValPresion" class="text-base font-extrabold font-mono-tech text-slate-900 mt-0.5">2.2 bar</div>
+                                <div class="text-[10px] text-emerald-700 font-semibold">Dentro de rango (1.5 - 2.5 bar)</div>
+                            </div>
+                            <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50">
+                                <div class="text-[10px] text-slate-500 font-bold uppercase">Temperatura Salida ACS</div>
+                                <div id="pdfValTemp" class="text-base font-extrabold font-mono-tech text-slate-900 mt-0.5">58 °C</div>
+                                <div class="text-[10px] text-emerald-700 font-semibold">Estable en acumulador</div>
+                            </div>
+                            <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50">
+                                <div class="text-[10px] text-slate-500 font-bold uppercase">Consumo Bomba #1</div>
+                                <div id="pdfValAmperaje" class="text-base font-extrabold font-mono-tech text-slate-900 mt-0.5">8.4 A</div>
+                                <div class="text-[10px] text-emerald-700 font-semibold">Sin sobrecarga térmica</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Checklist Table in PDF -->
+                    <div class="mb-5">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-2">2. Protocolo de Inspección Técnica</h3>
+                        <table class="w-full text-xs border border-slate-200 rounded-lg overflow-hidden">
+                            <thead class="bg-slate-800 text-white text-left">
+                                <tr>
+                                    <th class="py-2 px-3">Punto de Control Técnico</th>
+                                    <th class="py-2 px-3 w-36 text-center">Estado Final</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pdfChecklistTable" class="divide-y divide-slate-200">
+                                <!-- Filled by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Spare Parts & Defontana Valuation Table -->
+                    <div class="mb-5">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-2">3. Repuestos e Insumos Instalados (Rebajados en Defontana ERP)</h3>
+                        <table class="w-full text-xs border border-slate-200 rounded-lg overflow-hidden">
+                            <thead class="bg-slate-100 text-slate-700 text-left border-b border-slate-200">
+                                <tr>
+                                    <th class="py-2 px-3">Código SKU</th>
+                                    <th class="py-2 px-3">Descripción Repuesto / Servicio</th>
+                                    <th class="py-2 px-3 text-center">Cant.</th>
+                                    <th class="py-2 px-3 text-right">Subtotal Neto</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pdfPartsTable" class="divide-y divide-slate-200 font-mono-tech">
+                                <!-- Filled by JS -->
+                            </tbody>
+                            <tfoot class="bg-slate-50 font-bold text-slate-900 border-t-2 border-slate-300">
+                                <tr>
+                                    <td colspan="3" class="py-2 px-3 text-right">TOTAL NETO ORDEN DE TRABAJO:</td>
+                                    <td id="pdfTotalNeto" class="py-2 px-3 text-right font-mono-tech">$147.500</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="py-1.5 px-3 text-right text-slate-600">IVA (19%) · Pre-Factura Defontana:</td>
+                                    <td id="pdfTotalBruto" class="py-1.5 px-3 text-right font-mono-tech text-sky-800">$175.525</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <!-- Technical Observations & Signature Box -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center pt-3 border-t border-slate-200">
+                        <div class="md:col-span-7">
+                            <h4 class="text-[11px] font-extrabold uppercase text-slate-700 mb-1">4. Informe y Observaciones del Técnico</h4>
+                            <p id="pdfObservations" class="text-xs text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-200 leading-relaxed"></p>
+                        </div>
+                        <div class="md:col-span-5 text-center bg-slate-50 p-3 rounded-xl border border-slate-300">
+                            <div class="text-[10px] font-bold uppercase text-slate-500 mb-1">Recepción Conforme en Comunidad</div>
+                            <img id="pdfSignatureImg" alt="Firma recepción" class="h-16 mx-auto object-contain bg-white border border-slate-200 rounded px-2" />
+                            <div id="pdfReceptorName" class="text-xs font-bold text-slate-900 mt-1">Juan Carlos Muñoz</div>
+                            <div id="pdfReceptorRole" class="text-[10px] text-slate-500">Mayordomo / Jefe Conserjería · Firma Táctil Verificada</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- =================================================================
+                 TAB 3: LIVE OPERATIONS BOARD (24/7 FLEET & BILLING)
+                 ================================================================= -->
+            <div id="panelBoard" class="hidden no-print space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                        <span class="text-xs text-slate-400">Órdenes Cerradas Hoy</span>
+                        <div class="text-2xl font-extrabold text-white mt-1">18 OTs</div>
+                        <span class="text-[11px] text-emerald-400 font-semibold">100% con respaldo fotográfico y firma</span>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                        <span class="text-xs text-slate-400">Facturación Lista en Defontana</span>
+                        <div class="text-2xl font-extrabold text-sky-400 font-mono-tech mt-1">$2.840.000</div>
+                        <span class="text-[11px] text-slate-400">Tiempo promedio terreno → factura: <strong>12 seg</strong></span>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                        <span class="text-xs text-slate-400">Horas Administrativas Ahorradas</span>
+                        <div class="text-2xl font-extrabold text-amber-400 mt-1">3.5 hrs / día</div>
+                        <span class="text-[11px] text-slate-400">Cero transcripción de hojas de papel</span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                    <h3 class="text-sm font-bold text-white mb-3">Estado en Tiempo Real de Cuadrillas en Terreno</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-left">
+                            <thead class="text-slate-400 border-b border-slate-800 uppercase text-[10px]">
+                                <tr>
+                                    <th class="py-2 px-3">Folio</th>
+                                    <th class="py-2 px-3">Técnico / Móvil</th>
+                                    <th class="py-2 px-3">Comunidad / Edificio</th>
+                                    <th class="py-2 px-3">Señal / Ubicación</th>
+                                    <th class="py-2 px-3">Estado Defontana</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/70 text-slate-200">
+                                <tr>
+                                    <td class="py-2.5 px-3 font-mono-tech font-bold text-sky-400">#OT-8842</td>
+                                    <td class="py-2.5 px-3">R. Valdivia (Móvil #03)</td>
+                                    <td class="py-2.5 px-3">Edificio Parque Las Condes</td>
+                                    <td class="py-2.5 px-3" id="boardRowSignal"><span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold">Subterráneo -2 (Offline)</span></td>
+                                    <td class="py-2.5 px-3" id="boardRowErp"><span class="text-amber-300 font-mono-tech">En cola local del celular</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 font-mono-tech font-bold text-sky-400">#OT-8841</td>
+                                    <td class="py-2.5 px-3">M. Contreras (Móvil #01)</td>
+                                    <td class="py-2.5 px-3">Condominio Los Trapenses II</td>
+                                    <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">4G LTE Online</span></td>
+                                    <td class="py-2.5 px-3"><span class="text-emerald-400 font-mono-tech">✓ Pre-Factura #DF-4910 creada</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 font-mono-tech font-bold text-sky-400">#OT-8840</td>
+                                    <td class="py-2.5 px-3">C. Sepúlveda (Móvil #02)</td>
+                                    <td class="py-2.5 px-3">Edificio Don Carlos · Providencia</td>
+                                    <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">4G LTE Online</span></td>
+                                    <td class="py-2.5 px-3"><span class="text-emerald-400 font-mono-tech">✓ Rebaja Stock + PDF enviado a Edipro</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- APPLICATION LOGIC (INSPIRED BY OfflineService.ts & pdfGenerator.ts) -->
+    <script>
+        // 1. STATE MANAGEMENT
+        const state = {
+            brand: 'gradoclima', // 'gradoclima' | 'centralbombas'
+            isOnline: false,     // Starts in Subterranean Offline mode to showcase the core value
+            isSynced: false,
+            folio: 'OT-2026-8842',
+            clientUuid: 'ef79b420-91a4-4c12-8f30-gradoclima8842',
+            communityKey: 'parque',
+            checklist: [
+                { id: 'chk1', label: 'Quemador modulante y rampa de gas', status: 'OK' },
+                { id: 'chk2', label: 'Intercambiador de placas y sellos EPDM', status: 'OK' },
+                { id: 'chk3', label: 'Bombas recirculadoras (alternancia y sello)', status: 'CORREGIDO' },
+                { id: 'chk4', label: 'Válvula de alivio 3 bar y vaso de expansión', status: 'CORREGIDO' },
+                { id: 'chk5', label: 'Matriz sanitaria PPR / Shaft sin filtraciones', status: 'OK' }
+            ],
+            parts: [
+                { sku: 'ANW-VAL-003', name: 'Válvula Alivio Seguridad 3 Bar 3/4" Anwo', price: 38500, qty: 1, selected: true },
+                { sku: 'GRUN-SEL-204', name: 'Kit Sello Mecánico Carburo Bomba 2HP', price: 64000, qty: 1, selected: true },
+                { sku: 'WIK-MAN-010', name: 'Manómetro Glicerina Inox 0-10 Bar', price: 22000, qty: 0, selected: false },
+                { sku: 'SRV-EME-247', name: 'Visita Técnica Especialista / Convenio', price: 45000, qty: 1, selected: true }
+            ]
+        };
+
+        const communityPresets = {
+            parque: {
+                name: 'Comunidad Edificio Parque Las Condes',
+                rut: '53.318.920-4',
+                admin: 'Edipro',
+                modalidad: 'Convenio + Emergencia 24/7',
+                equipoGrado: 'Sala de Calderas Torre A (2 Calderas Anwo + Bombas)',
+                equipoCentral: 'Sala de Bombas Agua Potable (3 Bombas 5.5 HP + Tablero VDF)',
+                receptor: 'Juan Carlos Muñoz',
+                cargo: 'Mayordomo / Jefe Conserjería'
+            },
+            mirador: {
+                name: 'Condominio Mirador Lo Campino',
+                rut: '56.104.220-K',
+                admin: 'ComunidadFeliz',
+                modalidad: 'Mantención Preventiva Mensual',
+                equipoGrado: 'Sala de Bombas Hidroneumáticas & Matriz PPR',
+                equipoCentral: 'Grupo Presurización Aguas Lluvias & Sentina',
+                receptor: 'Patricia Arriagada',
+                cargo: 'Administradora / Comité'
+            },
+            paseo: {
+                name: 'Centro Comercial Paseo Estación',
+                rut: '76.492.110-8',
+                admin: 'Administración Interna',
+                modalidad: 'Orden Correctiva Facturable',
+                equipoGrado: 'Red Húmeda / Seca Contra Incendio & Presurizado',
+                equipoCentral: 'Bomba Impulsión Red Húmeda 15 HP',
+                receptor: 'Roberto Soto',
+                cargo: 'Jefe de Operaciones Turno'
+            }
+        };
+
+        // 2. FORMATTERS
+        function formatCLP(num) {
+            return '$' + Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        // 3. RENDER CHECKLIST & SPARE PARTS
+        function renderChecklist() {
+            const container = document.getElementById('checklistContainer');
+            container.innerHTML = state.checklist.map((item, idx) => {
+                const badgeClass = item.status === 'OK'
+                    ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                    : item.status === 'CORREGIDO'
+                    ? 'bg-sky-100 text-sky-800 border-sky-300'
+                    : 'bg-rose-100 text-rose-800 border-rose-300';
+                return `
+                    <div class="flex items-center justify-between gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200">
+                        <span class="text-[11px] font-medium text-slate-800">${item.label}</span>
+                        <button type="button" onclick="cycleChecklistStatus(${idx})" class="px-2 py-0.5 rounded text-[10px] font-bold border ${badgeClass} transition shrink-0">
+                            ${item.status}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function cycleChecklistStatus(idx) {
+            const order = ['OK', 'CORREGIDO', 'FALLA'];
+            const current = state.checklist[idx].status;
+            state.checklist[idx].status = order[(order.indexOf(current) + 1) % order.length];
+            state.isSynced = false;
+            renderChecklist();
+            refreshAllOutputs();
+        }
+
+        function renderParts() {
+            const container = document.getElementById('partsContainer');
+            container.innerHTML = state.parts.map((part, idx) => `
+                <div class="flex items-center justify-between gap-2 p-2 rounded-lg ${part.selected ? 'bg-sky-50/70 border border-sky-200' : 'bg-slate-50 border border-slate-200'}">
+                    <label class="flex items-center gap-2 cursor-pointer flex-1">
+                        <input type="checkbox" ${part.selected ? 'checked' : ''} onchange="togglePart(${idx})" class="rounded text-sky-600 focus:ring-sky-500">
+                        <div>
+                            <div class="text-[11px] font-semibold text-slate-900">${part.name}</div>
+                            <div class="text-[10px] font-mono-tech text-slate-500">SKU: ${part.sku} · ${formatCLP(part.price)} c/u</div>
+                        </div>
+                    </label>
+                    <div class="flex items-center gap-1">
+                        <button type="button" onclick="changePartQty(${idx}, -1)" class="w-5 h-5 rounded bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center">-</button>
+                        <span class="w-5 text-center font-mono-tech text-xs font-bold text-slate-900">${part.qty}</span>
+                        <button type="button" onclick="changePartQty(${idx}, 1)" class="w-5 h-5 rounded bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function togglePart(idx) {
+            state.parts[idx].selected = !state.parts[idx].selected;
+            if (state.parts[idx].selected && state.parts[idx].qty === 0) state.parts[idx].qty = 1;
+            if (!state.parts[idx].selected) state.parts[idx].qty = 0;
+            state.isSynced = false;
+            renderParts();
+            refreshAllOutputs();
+        }
+
+        function changePartQty(idx, delta) {
+            const next = Math.max(0, state.parts[idx].qty + delta);
+            state.parts[idx].qty = next;
+            state.parts[idx].selected = next > 0;
+            state.isSynced = false;
+            renderParts();
+            refreshAllOutputs();
+        }
+
+        // 4. LOAD COMMUNITY PRESET
+        function loadPresetOrder(key) {
+            state.communityKey = key;
+            const p = communityPresets[key];
+            document.getElementById('infoRut').textContent = p.rut;
+            document.getElementById('infoModalidad').textContent = p.modalidad;
+            document.getElementById('infoEquipo').textContent = state.brand === 'gradoclima' ? p.equipoGrado : p.equipoCentral;
+            document.getElementById('inpReceptor').value = p.receptor;
+            document.getElementById('inpCargoReceptor').value = p.cargo;
+            state.isSynced = false;
+            refreshAllOutputs();
+        }
+
+        // 5. SWITCH BRAND (GRADO CLIMA vs CENTRAL BOMBAS)
+        function switchClientBrand(brand) {
+            state.brand = brand;
+            const isGrado = brand === 'gradoclima';
+
+            document.getElementById('btnBrandGrado').className = isGrado
+                ? 'px-3 py-1 rounded-md text-xs font-semibold transition bg-sky-600 text-white shadow'
+                : 'px-3 py-1 rounded-md text-xs font-semibold transition text-slate-400 hover:text-white';
+            document.getElementById('btnBrandCentral').className = !isGrado
+                ? 'px-3 py-1 rounded-md text-xs font-semibold transition bg-sky-600 text-white shadow'
+                : 'px-3 py-1 rounded-md text-xs font-semibold transition text-slate-400 hover:text-white';
+
+            document.getElementById('mobBrandBadge').textContent = isGrado ? 'GRADO CLIMA' : 'CENTRAL BOMBAS';
+            document.getElementById('mobBrandSubtitle').textContent = isGrado
+                ? 'Terreno · Calderas & Salas de Bombas'
+                : 'Terreno · Salas de Bombas & Motores';
+
+            document.getElementById('pdfBrandPill').textContent = isGrado ? 'GRADO CLIMA SPA' : 'CENTRAL BOMBAS SPA';
+            document.getElementById('pdfCompanyAddress').textContent = isGrado
+                ? 'Camino del Cerro 1616, Valle Lo Campino, Quilicura · Emergencias 24/7: +56 9 8804 7611 · contacto@gradoclima.cl'
+                : 'Santiago de Chile · Servicio Técnico de Bombas de Agua, Rebobinaje y Tableros · centralbombas.cl';
+
+            loadPresetOrder(state.communityKey);
+        }
+
+        // 6. NETWORK MODE & ASCENSOR SYNC SIMULATION
+        function toggleNetworkMode() {
+            state.isOnline = !state.isOnline;
+            if (state.isOnline) {
+                state.isSynced = true;
+            } else {
+                state.isSynced = false;
+            }
+            updateNetworkUI();
+            refreshAllOutputs();
+        }
+
+        function simulateAscensorSync() {
+            state.isOnline = true;
+            state.isSynced = true;
+            updateNetworkUI();
+            refreshAllOutputs();
+        }
+
+        function handleMobileSaveOrder() {
+            if (!state.isOnline) {
+                // Save to local IndexedDB/localStorage queue
+                state.isSynced = false;
+                const btn = document.getElementById('btnMobileSubmit');
+                btn.classList.replace('bg-sky-600', 'bg-amber-600');
+                document.getElementById('btnMobileSubmitText').textContent = '✓ Guardada en Cola Offline · Sube al ascensor para sincronizar';
+                setTimeout(() => {
+                    btn.classList.replace('bg-amber-600', 'bg-sky-600');
+                    document.getElementById('btnMobileSubmitText').textContent = 'Cerrar OT en Subterráneo (Guardar en Cola Local)';
+                }, 2600);
+            } else {
+                simulateAscensorSync();
+            }
+            refreshAllOutputs();
+        }
+
+        function updateNetworkUI() {
+            const netLabel = document.getElementById('netLabel');
+            const netDot = document.getElementById('netDot');
+            const btnToggle = document.getElementById('btnToggleNetwork');
+            const phoneBanner = document.getElementById('phoneNetBanner');
+            const phoneBannerText = document.getElementById('phoneNetBannerText');
+            const phoneQueueCounter = document.getElementById('phoneQueueCounter');
+            const phoneSignalBadge = document.getElementById('phoneSignalBadge');
+            const syncStatusPill = document.getElementById('syncStatusPill');
+
+            if (state.isOnline && state.isSynced) {
+                netLabel.textContent = 'EN SUPERFICIE (4G LTE ACTIVO · SINCRONIZADO DEFONTANA)';
+                netDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+                btnToggle.className = 'flex items-center gap-2 px-3 py-1 rounded-lg text-xs font-bold transition bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+
+                phoneBanner.className = 'bg-emerald-600 text-white px-3.5 py-1.5 text-[11px] font-bold flex items-center justify-between';
+                phoneBannerText.textContent = '4G CONECTADO · Sincronizado con Defontana ERP';
+                phoneQueueCounter.textContent = 'Cola: 0 OT';
+                phoneSignalBadge.innerHTML = '<span class="text-emerald-400">4G LTE ●●●●</span>';
+
+                syncStatusPill.className = 'px-3 py-1 rounded-full text-[11px] font-mono-tech font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
+                syncStatusPill.textContent = 'is_synced: 1 (Sincronizado con API Defontana)';
+
+                // Pipeline cards highlight
+                document.getElementById('stepLocalBadge').textContent = '✓ Cola local vaciada con éxito';
+                document.getElementById('stepLocalBadge').className = 'mt-2.5 text-[11px] font-mono-tech text-emerald-400 font-semibold';
+
+                document.getElementById('stepCardDefontana').className = 'p-3.5 rounded-xl border border-sky-500/60 bg-sky-500/10';
+                document.getElementById('stepDefontanaBadge').textContent = '✓ Stock rebajado + Pre-Factura #DF-8842 creada';
+                document.getElementById('stepDefontanaBadge').className = 'mt-2.5 text-[11px] font-mono-tech text-sky-300 font-semibold';
+
+                document.getElementById('stepCardAdmin').className = 'p-3.5 rounded-xl border border-emerald-500/60 bg-emerald-500/10';
+                document.getElementById('stepAdminBadge').textContent = '✓ PDF enviado a administrador del edificio';
+                document.getElementById('stepAdminBadge').className = 'mt-2.5 text-[11px] font-mono-tech text-emerald-300 font-semibold';
+
+                document.getElementById('erpDocStatus').className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300';
+                document.getElementById('erpDocStatus').textContent = '✓ Pre-Factura #DF-8842 Lista en Defontana';
+
+                document.getElementById('boardRowSignal').innerHTML = '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">4G LTE Online</span>';
+                document.getElementById('boardRowErp').innerHTML = '<span class="text-emerald-400 font-mono-tech">✓ Pre-Factura #DF-8842 + Stock rebajado</span>';
+            } else {
+                netLabel.textContent = 'SUBTERRÁNEO -2 (SIN SEÑAL 4G · MODO OFFLINE)';
+                netDot.className = 'w-2 h-2 rounded-full bg-amber-400';
+                btnToggle.className = 'flex items-center gap-2 px-3 py-1 rounded-lg text-xs font-bold transition bg-amber-500/20 text-amber-300 border border-amber-500/40';
+
+                phoneBanner.className = 'bg-amber-500 text-slate-950 px-3.5 py-1.5 text-[11px] font-bold flex items-center justify-between';
+                phoneBannerText.textContent = 'MODO SUBTERRÁNEO · Guardado Local Activo';
+                phoneQueueCounter.textContent = 'Cola: 1 OT';
+                phoneSignalBadge.innerHTML = '<span class="text-amber-400">Sin Red (Piso -2)</span>';
+
+                syncStatusPill.className = 'px-3 py-1 rounded-full text-[11px] font-mono-tech font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30';
+                syncStatusPill.textContent = 'is_synced: 0 (En teléfono del técnico)';
+
+                document.getElementById('stepLocalBadge').textContent = '● 1 OT retenida en memoria local (IndexedDB)';
+                document.getElementById('stepLocalBadge').className = 'mt-2.5 text-[11px] font-mono-tech text-amber-300 font-semibold';
+
+                document.getElementById('stepCardDefontana').className = 'p-3.5 rounded-xl border border-slate-800 bg-slate-950/60';
+                document.getElementById('stepDefontanaBadge').textContent = '○ Esperando señal 4G del técnico...';
+                document.getElementById('stepDefontanaBadge').className = 'mt-2.5 text-[11px] font-mono-tech text-slate-500';
+
+                document.getElementById('stepCardAdmin').className = 'p-3.5 rounded-xl border border-slate-800 bg-slate-950/60';
+                document.getElementById('stepAdminBadge').textContent = '○ Pendiente de sincronización...';
+                document.getElementById('stepAdminBadge').className = 'mt-2.5 text-[11px] font-mono-tech text-slate-500';
+
+                document.getElementById('erpDocStatus').className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300';
+                document.getElementById('erpDocStatus').textContent = 'En Cola Local del Celular (is_synced: 0)';
+
+                document.getElementById('boardRowSignal').innerHTML = '<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold">Subterráneo -2 (Offline)</span>';
+                document.getElementById('boardRowErp').innerHTML = '<span class="text-amber-300 font-mono-tech">En cola local del celular</span>';
+            }
+        }
+
+        // 7. REFRESH ALL OUTPUTS (JSON PAYLOAD + TOTALS + PDF PREVIEW)
+        function refreshAllOutputs() {
+            const p = communityPresets[state.communityKey];
+            const presion = document.getElementById('inpPresion').value;
+            const temp = document.getElementById('inpTemp').value;
+            const amp = document.getElementById('inpAmperaje').value;
+            const obs = document.getElementById('inpObservacion').value;
+            const receptor = document.getElementById('inpReceptor').value;
+            const cargo = document.getElementById('inpCargoReceptor').value;
+
+            const activeParts = state.parts.filter(x => x.selected && x.qty > 0);
+            const totalNeto = activeParts.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const totalBruto = Math.round(totalNeto * 1.19);
+
+            // Mobile footer total
+            document.getElementById('mobTotalNeto').textContent = formatCLP(totalNeto);
+
+            // ERP Cards
+            document.getElementById('erpClientName').textContent = p.name;
+            document.getElementById('erpClientRut').textContent = p.rut;
+            document.getElementById('erpTotalBruto').textContent = formatCLP(totalBruto) + ' CLP';
+
+            const erpPartsHtml = activeParts.map(item =>
+                `<div class="flex justify-between"><span>- ${item.qty}x [${item.sku}] ${item.name}</span><span class="text-sky-300">${formatCLP(item.price * item.qty)}</span></div>`
+            ).join('');
+            document.getElementById('erpPartsSummaryList').innerHTML = erpPartsHtml || '<div class="text-slate-500">Sin repuestos seleccionados</div>';
+
+            // Defontana JSON Payload
+            const payload = {
+                offline_queue_meta: {
+                    client_uuid: state.clientUuid,
+                    is_synced: state.isSynced ? 1 : 0,
+                    captured_offline_in_basement: !state.isOnline,
+                    timestamp_chile: new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' })
+                },
+                defontana_erp_sync: {
+                    endpoint_sale_order: 'POST https://api.defontana.com/api/v1/SaleOrder',
+                    endpoint_inventory: 'POST https://api.defontana.com/api/v1/Inventory/Movement',
+                    client_rut: p.rut,
+                    client_name: p.name,
+                    warehouse_code: 'BODEGA-MOVIL-03',
+                    cost_center: state.brand === 'gradoclima' ? 'CC-CALDERAS-247' : 'CC-BOMBAS-IMPULSION',
+                    net_amount_clp: totalNeto,
+                    tax_iva_clp: totalBruto - totalNeto,
+                    total_amount_clp: totalBruto,
+                    items: activeParts.map(i => ({
+                        sku: i.sku,
+                        description: i.name,
+                        quantity: i.qty,
+                        unit_price_clp: i.price
+                    }))
+                },
+                technical_telemetry: {
+                    pressure_bar: parseFloat(presion),
+                    acs_temp_celsius: parseFloat(temp),
+                    pump_current_amps: parseFloat(amp),
+                    signed_by: `${receptor} (${cargo})`,
+                    community_platform: p.admin
+                }
+            };
+            document.getElementById('jsonPayloadViewer').textContent = JSON.stringify(payload, null, 2);
+
+            // Update PDF Document
+            document.getElementById('pdfCommunityName').textContent = p.name;
+            document.getElementById('pdfCommunityRut').textContent = p.rut;
+            document.getElementById('pdfAdminPlatform').textContent = `Respaldo ${p.admin}`;
+            document.getElementById('pdfEquipment').textContent = state.brand === 'gradoclima' ? p.equipoGrado : p.equipoCentral;
+            document.getElementById('pdfValPresion').textContent = `${presion} bar`;
+            document.getElementById('pdfValTemp').textContent = `${temp} °C`;
+            document.getElementById('pdfValAmperaje').textContent = `${amp} A`;
+            document.getElementById('pdfObservations').textContent = obs;
+            document.getElementById('pdfReceptorName').textContent = receptor;
+            document.getElementById('pdfReceptorRole').textContent = `${cargo} · Firma Táctil Verificada`;
+
+            // PDF Checklist Table
+            document.getElementById('pdfChecklistTable').innerHTML = state.checklist.map(c => `
+                <tr>
+                    <td class="py-1.5 px-3 font-medium text-slate-800">${c.label}</td>
+                    <td class="py-1.5 px-3 text-center font-bold ${c.status === 'OK' ? 'text-emerald-700' : c.status === 'CORREGIDO' ? 'text-sky-700' : 'text-rose-700'}">${c.status}</td>
+                </tr>
+            `).join('');
+
+            // PDF Parts Table
+            document.getElementById('pdfPartsTable').innerHTML = activeParts.map(item => `
+                <tr>
+                    <td class="py-1.5 px-3 font-semibold text-slate-700">${item.sku}</td>
+                    <td class="py-1.5 px-3 text-slate-800">${item.name}</td>
+                    <td class="py-1.5 px-3 text-center">${item.qty}</td>
+                    <td class="py-1.5 px-3 text-right font-bold">${formatCLP(item.price * item.qty)}</td>
+                </tr>
+            `).join('');
+            document.getElementById('pdfTotalNeto').textContent = formatCLP(totalNeto);
+            document.getElementById('pdfTotalBruto').textContent = formatCLP(totalBruto);
+
+            // Sync signature canvas to PDF preview image
+            const canvas = document.getElementById('sigCanvas');
+            if (canvas) {
+                document.getElementById('pdfSignatureImg').src = canvas.toDataURL('image/png');
+            }
+        }
+
+        // 8. RIGHT TABS NAVIGATION
+        function switchRightTab(tab) {
+            const tabs = ['erp', 'pdf', 'board'];
+            tabs.forEach(t => {
+                const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
+                const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (t === tab) {
+                    panel.classList.remove('hidden');
+                    btn.className = 'px-3.5 py-2 rounded-lg text-xs font-bold transition bg-sky-600 text-white shadow flex items-center gap-2';
+                } else {
+                    panel.classList.add('hidden');
+                    btn.className = 'px-3.5 py-2 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white flex items-center gap-2';
+                }
+            });
+            refreshAllOutputs();
+        }
+
+        // 9. TOUCH & MOUSE SIGNATURE CANVAS
+        const sigCanvas = document.getElementById('sigCanvas');
+        const ctx = sigCanvas.getContext('2d');
+        let drawing = false;
+
+        function initSignatureCanvas() {
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2.2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            const getPos = (e) => {
+                const rect = sigCanvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: (clientX - rect.left) * (sigCanvas.width / rect.width),
+                    y: (clientY - rect.top) * (sigCanvas.height / rect.height)
+                };
+            };
+
+            const start = (e) => {
+                e.preventDefault();
+                drawing = true;
+                const pos = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            };
+            const move = (e) => {
+                if (!drawing) return;
+                e.preventDefault();
+                const pos = getPos(e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            };
+            const end = () => {
+                if (!drawing) return;
+                drawing = false;
+                refreshAllOutputs();
+            };
+
+            sigCanvas.addEventListener('mousedown', start);
+            sigCanvas.addEventListener('mousemove', move);
+            window.addEventListener('mouseup', end);
+            sigCanvas.addEventListener('touchstart', start, { passive: false });
+            sigCanvas.addEventListener('touchmove', move, { passive: false });
+            sigCanvas.addEventListener('touchend', end);
+
+            drawSampleSignature();
+        }
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+            refreshAllOutputs();
+        }
+
+        function drawSampleSignature() {
+            ctx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+            ctx.beginPath();
+            ctx.strokeStyle = '#1e3a8a';
+            ctx.lineWidth = 2.2;
+            ctx.moveTo(45, 58);
+            ctx.bezierCurveTo(75, 20, 110, 68, 145, 32);
+            ctx.bezierCurveTo(175, 12, 195, 62, 235, 40);
+            ctx.lineTo(275, 48);
+            ctx.moveTo(65, 65);
+            ctx.lineTo(245, 58);
+            ctx.stroke();
+            refreshAllOutputs();
+        }
+
+        function handleCustomPhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            document.getElementById('customPhotoLabel').textContent = '✓ ' + file.name.slice(0, 22);
+        }
+
+        function resetDemoScenario() {
+            state.isOnline = false;
+            state.isSynced = false;
+            loadPresetOrder('parque');
+            drawSampleSignature();
+            updateNetworkUI();
+            refreshAllOutputs();
+        }
+
+        // INIT ON LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const brandParam = urlParams.get('brand') || urlParams.get('empresa') || urlParams.get('cliente');
+            if (brandParam && (brandParam.toLowerCase().includes('central') || brandParam.toLowerCase().includes('bomba'))) {
+                switchClientBrand('centralbombas');
+            }
+            renderChecklist();
+            renderParts();
+            initSignatureCanvas();
+            updateNetworkUI();
+            refreshAllOutputs();
+        });
+    </script>
+</body>
+</html>

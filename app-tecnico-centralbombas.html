@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-100 text-slate-900">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Central Bombas SpA · PWA Técnico en Terreno</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="robots" content="noindex, nofollow">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .font-mono-tech {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        canvas#sigCanvas {
+            touch-action: none;
+            cursor: crosshair;
+        }
+        .smooth-scroll {
+            -webkit-overflow-scrolling: touch;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.28s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col bg-slate-100 text-slate-900 selection:bg-sky-500 selection:text-white">
+
+    <!-- =========================================================================
+         GLOBAL NATIVE APP HEADER (WHITE CORPORATE BRANDING + LOGO CENTRAL BOMBAS)
+         ========================================================================= -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm px-4 py-2.5 shrink-0">
+        
+        <!-- Native Top Status Row (Time, Battery, Signal Toggle) -->
+        <div class="flex items-center justify-between text-[11px] font-mono-tech text-slate-500 mb-2">
+            <span id="topLiveClock" class="font-semibold text-slate-700">08:14 hrs</span>
+            <div class="flex items-center gap-2">
+                
+                <!-- Battery Indicator (Lucide Vector) -->
+                <div class="flex items-center gap-1 text-emerald-700 font-semibold">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <rect width="16" height="10" x="2" y="7" rx="2" ry="2" stroke-width="2"/>
+                        <line x1="22" x2="22" y1="11" y2="13" stroke-width="2"/>
+                        <line x1="6" x2="13" y1="12" y2="12" stroke-width="2"/>
+                    </svg>
+                    <span>98%</span>
+                </div>
+
+                <!-- Signal Status Toggle Button -->
+                <button id="btnSignalToggle" onclick="toggleSignal()" class="px-2 py-0.5 rounded font-bold transition flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span id="signalDot" class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span id="signalIconSlot" class="inline-flex items-center">
+                        <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 20V4"/>
+                        </svg>
+                    </span>
+                    <span id="lblSignalStatus">Superficie 4G (Online)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Central Bombas Identity with Real Official Logo -->
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <img src="logo_centralbombas.png" alt="Central Bombas SpA" class="h-8 max-w-[155px] object-contain shrink-0">
+                <div class="hidden sm:block border-l border-slate-200 pl-2">
+                    <span class="px-1.5 py-0.5 rounded text-[9px] font-mono-tech font-bold bg-sky-50 text-[#00639e] border border-sky-200">
+                        DEFONTANA PWA
+                    </span>
+                    <div class="text-[9px] text-slate-500">Sepúlveda Leyton 3068</div>
+                </div>
+            </div>
+
+            <!-- Portal Desktop Link -->
+            <a href="demo-central-bombas.html" target="_blank" class="px-2.5 py-1 rounded-lg text-[10px] font-semibold bg-slate-50 hover:bg-slate-100 text-[#00639e] border border-sky-200 transition flex items-center gap-1.5 shadow-sm">
+                <svg class="w-3 h-3 text-[#00639e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <rect width="18" height="12" x="3" y="4" rx="2" stroke-width="2"/>
+                    <line x1="2" x2="22" y1="20" y2="20" stroke-width="2"/>
+                    <line x1="12" x2="12" y1="16" y2="20" stroke-width="2"/>
+                </svg>
+                <span class="font-bold">Portal Oficina</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- =========================================================================
+         TECHNICIAN PROFILE BAR (LIGHT CORPORATE BLUE ACCENT)
+         ========================================================================= -->
+    <div class="bg-white border-b border-slate-200 px-4 py-2.5 shrink-0 shadow-sm">
+        <div class="max-w-lg mx-auto flex items-center justify-between gap-3">
+            
+            <!-- Avatar & Tech Identity -->
+            <div class="flex items-center gap-2.5 min-w-0">
+                <div class="relative shrink-0">
+                    <div id="techAvatarPill" class="w-10 h-10 rounded-full bg-[#00639e] text-white font-black flex items-center justify-center text-sm shadow-sm border border-sky-300">
+                        MG
+                    </div>
+                    <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white" title="Activo"></span>
+                </div>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                        <span id="techNameLabel" class="text-xs font-black text-slate-900 truncate">Marcelo Gómez Valdés</span>
+                        <span class="text-[9px] font-mono-tech px-1.5 py-0.2 rounded bg-sky-50 text-[#00639e] font-bold border border-sky-200 shrink-0">
+                            ID: TEC-002
+                        </span>
+                    </div>
+                    <div id="techRoleLabel" class="text-[10px] text-slate-500 truncate font-medium">
+                        Cuadrilla Hidráulica #2 · Móvil #4 (KH-2984)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Authenticated Device & Shift Badge (Locked to Technician) -->
+            <div class="shrink-0 text-right">
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold shadow-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Turno Activo</span>
+                </div>
+                <div class="text-[9px] font-mono-tech text-slate-400 mt-0.5">Dispositivo Móvil #4</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         CONTAINER VIEW 1: BANDEJA DE ÓRDENES ASIGNADAS AL TÉCNICO
+         ========================================================================= -->
+    <div id="viewOrderList" class="flex-grow overflow-y-auto smooth-scroll px-4 py-3 space-y-3.5 max-w-lg mx-auto w-full pb-20 animate-fade-in">
+        
+        <!-- =====================================================================
+             STAGE A: EMPTY STATE (BEFORE MORNING SYNC)
+             ===================================================================== -->
+        <div id="boxMorningPending" class="p-6 rounded-3xl bg-white border border-slate-200 text-center space-y-4 shadow-sm mt-2 animate-fade-in">
+            <div class="w-16 h-16 rounded-2xl bg-sky-50 border border-sky-200 text-[#00639e] flex items-center justify-center mx-auto shadow-sm">
+                <!-- Cloud Download Vector -->
+                <svg class="w-8 h-8 text-[#00639e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242M12 12v9m-4-4 4 4 4-4"/>
+                </svg>
+            </div>
+            <div>
+                <span class="text-[10px] font-mono-tech uppercase font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+                    PENDIENTE DESCARGA DE RUTA
+                </span>
+                <h2 class="text-base font-extrabold text-slate-900 mt-2">
+                    Buenos días, <span id="pendingTechName">Marcelo Gómez</span>
+                </h2>
+                <p class="text-xs text-slate-600 mt-1 max-w-xs mx-auto leading-relaxed">
+                    Aún no tienes órdenes descargadas en este teléfono para la jornada de hoy. Conéctate con Defontana ERP para bajar tu ruta y operar bajo tierra sin conexión.
+                </p>
+            </div>
+
+            <!-- Trigger Button -->
+            <div class="pt-2">
+                <button id="btnTriggerMorningSync" onclick="startMorningDefontanaSync()" class="w-full py-4 px-5 rounded-2xl font-black text-xs uppercase tracking-wider text-white bg-gradient-to-r from-[#00639e] to-[#0284c7] hover:from-[#005282] hover:to-[#0274b0] shadow-lg shadow-sky-900/15 transition active:scale-[0.98] flex items-center justify-center gap-2">
+                    <svg id="syncSpinIcon" class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8m0 0V3m0 5h5m13 4a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16m18 0v5m0-5h-5"/>
+                    </svg>
+                    <span id="btnSyncText">Sincronizar Ruta con Defontana ERP</span>
+                </button>
+            </div>
+
+            <!-- Live Progress Log inside Card -->
+            <div id="syncProgressSteps" class="hidden text-left bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-[11px] font-mono-tech space-y-2">
+                <div id="syncStep1" class="text-slate-400 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+                    <span>1. Conectando con api.defontana.com...</span>
+                </div>
+                <div id="syncStep2" class="text-slate-400 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+                    <span>2. Autenticando Cuadrilla (Token OAuth2)...</span>
+                </div>
+                <div id="syncStep3" class="text-slate-400 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+                    <span>3. Descargando OTs y pautas a memoria IndexedDB...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- =====================================================================
+             STAGE B: SYNCED ORDERS LIST (REVEALED AFTER CLICKING SYNC)
+             ===================================================================== -->
+        <div id="boxMorningSuccess" class="hidden space-y-3 animate-fade-in">
+            
+            <!-- Confirmed Banner -->
+            <div class="p-3.5 rounded-2xl bg-sky-50 border border-sky-200 flex items-start justify-between gap-2.5 text-xs text-slate-700 shadow-sm">
+                <div class="flex items-start gap-2.5">
+                    <svg class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <strong class="font-bold text-slate-900">Ruta Sincronizada con Defontana ERP</strong>
+                            <span class="text-[9px] font-mono-tech px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-200">08:15 AM</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 mt-0.5" id="lblAssignedDesc">
+                            3 Órdenes de trabajo descargadas en memoria local para <strong>Marcelo Gómez</strong>. Listas para operar offline en subterráneos.
+                        </p>
+                    </div>
+                </div>
+                <button onclick="resetMorningSyncSimulation()" class="shrink-0 text-[10px] font-mono-tech text-[#00639e] hover:underline pt-0.5 flex items-center gap-1 font-bold">
+                    <svg class="w-3 h-3 text-[#00639e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16M3 21v-5h5"/>
+                    </svg>
+                    <span>Reiniciar</span>
+                </button>
+            </div>
+
+            <!-- Section Title & Counter -->
+            <div class="flex items-center justify-between px-1 pt-1">
+                <h1 class="text-xs font-black uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-[#00639e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <rect width="8" height="4" x="8" y="2" rx="1" stroke-width="2"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/>
+                    </svg>
+                    <span>Visitas Asignadas Hoy</span>
+                </h1>
+                <span class="text-[10px] font-mono-tech px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-bold" id="lblOtCounter">
+                    3 Visitas
+                </span>
+            </div>
+
+            <!-- Dynamic Orders Cards Container -->
+            <div id="ordersCardsContainer" class="space-y-3">
+                <!-- Cards will be populated here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Emergency Support Phone Bar -->
+        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 text-xs text-slate-600 flex items-center justify-between mt-4 shadow-sm">
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <span class="font-medium">Despacho Sepúlveda Leyton:</span>
+            </div>
+            <a href="tel:+56226842675" class="text-[#00639e] font-bold font-mono-tech hover:underline">+56 2 2684 2675</a>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         CONTAINER VIEW 2: FORMULARIO Y PAUTA TÉCNICA DE LA ORDEN SELECCIONADA
+         ========================================================================= -->
+    <div id="viewOrderForm" class="hidden flex-grow overflow-y-auto smooth-scroll px-4 py-3 space-y-3 max-w-lg mx-auto w-full pb-28 animate-fade-in">
+        
+        <!-- Back Button & Breadcrumb -->
+        <div class="flex items-center justify-between pb-0.5">
+            <button onclick="showOrderList()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-slate-50 text-[#00639e] transition flex items-center gap-1.5 border border-slate-200 shadow-sm active:scale-95">
+                <svg class="w-3.5 h-3.5 text-[#00639e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                <span>Volver a Mis Visitas</span>
+            </button>
+            <span class="font-mono-tech text-xs text-[#00639e] font-bold" id="formBreadcrumbOt">OT #CB-2026-0842</span>
+        </div>
+
+        <!-- Assigned Tech Confirmation Pill inside Form -->
+        <div class="p-2.5 rounded-xl bg-white border border-slate-200 flex items-center justify-between text-xs shadow-sm">
+            <div class="flex items-center gap-2 text-slate-700">
+                <span class="w-6 h-6 rounded-full bg-[#00639e] text-white font-bold flex items-center justify-center text-[10px]" id="formTechInitials">MG</span>
+                <div>
+                    <span class="text-[10px] text-slate-400 block leading-tight">Técnico Responsable:</span>
+                    <strong class="text-slate-900 text-xs" id="formTechName">Marcelo Gómez Valdés</strong>
+                </div>
+            </div>
+            <span class="text-[10px] font-mono-tech px-2 py-0.5 rounded bg-sky-50 text-[#00639e] border border-sky-200 font-bold" id="formVanPlate">
+                Móvil #4 (KH-2984)
+            </span>
+        </div>
+
+        <!-- Signal Banner inside Form -->
+        <div id="formSignalBanner" class="p-3 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-2.5 text-xs text-amber-900 shadow-sm">
+            <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                <line x1="12" x2="12" y1="9" y2="13" stroke-width="2"/>
+                <line x1="12" x2="12.01" y1="17" stroke-width="2"/>
+            </svg>
+            <div>
+                <strong class="font-bold text-amber-900">Subterráneo -3 (Offline):</strong> Mediciones, repuestos y firma se guardan de forma segura en este teléfono. Al subir a la calle se sincronizarán solas con Defontana.
+            </div>
+        </div>
+
+        <!-- Building & Equipment Card -->
+        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+            <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+                <span class="font-mono-tech font-bold text-[#00639e]" id="formHeaderOt">OT #CB-2026-0842</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-50 text-[#00639e] border border-sky-200" id="formBadgeStatus">En Faena</span>
+            </div>
+            <h2 class="text-base font-black text-slate-900" id="formBuildingTitle">Comunidad Edificio Torre Los Leones</h2>
+            <p class="text-xs text-slate-600 mt-0.5 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                </svg>
+                <span id="formBuildingAddress">Av. Los Leones 1450, Providencia</span>
+            </p>
+            <div class="mt-2.5 pt-2.5 border-t border-slate-100 text-xs">
+                <span class="text-slate-400 text-[10px] uppercase font-bold block">Sistema Intervenido:</span>
+                <div class="font-bold text-slate-800" id="formEquipmentName">Sala de Bombas Agua Potable (3 Bombas KSB 5.5 HP)</div>
+            </div>
+        </div>
+
+        <!-- Technical Parameters Form -->
+        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-700">1. Mediciones Hidráulicas & Eléctricas</span>
+                <span class="text-[10px] font-mono-tech font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">TOLERANCIA OK</span>
+            </div>
+
+            <!-- Pump 1 -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-900 mb-2">
+                    <span class="flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-[#00639e] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                        </svg>
+                        <span>Bomba 1 (Principal)</span>
+                    </span>
+                    <span class="text-[10px] font-mono-tech text-[#00639e] font-semibold" id="formBadgeP1">380V · 7.2A · 4.5 bar</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                    <div>
+                        <label class="text-[10px] text-slate-500 block font-medium">Voltaje (V):</label>
+                        <input type="text" id="inpV1" value="380 V" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-mono-tech font-bold text-center text-slate-800 focus:outline-none focus:border-[#00639e]">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-500 block font-medium">Corriente (A):</label>
+                        <input type="text" id="inpA1" value="7.2 A" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-mono-tech font-bold text-center text-[#00639e] focus:outline-none focus:border-[#00639e]">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-500 block font-medium">Presión (bar):</label>
+                        <input type="text" id="inpP1" value="4.5 bar" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-mono-tech font-bold text-center text-emerald-700 focus:outline-none focus:border-[#00639e]">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pump 2 -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-900 mb-2">
+                    <span class="flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-[#00639e] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                        </svg>
+                        <span>Bomba 2 (Alternancia)</span>
+                    </span>
+                    <span class="text-[10px] font-mono-tech text-[#00639e] font-semibold" id="formBadgeP2">380V · 7.1A · 4.5 bar</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                    <div>
+                        <label class="text-[10px] text-slate-500 block font-medium">Voltaje (V):</label>
+                        <input type="text" id="inpV2" value="380 V" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-mono-tech font-bold text-center text-slate-800 focus:outline-none focus:border-[#00639e]">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-500 block font-medium">Corriente (A):</label>
+                        <input type="text" id="inpA2" value="7.1 A" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-mono-tech font-bold text-center text-[#00639e] focus:outline-none focus:border-[#00639e]">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-500 block font-medium">Presión (bar):</label>
+                        <input type="text" id="inpP2" value="4.5 bar" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-mono-tech font-bold text-center text-emerald-700 focus:outline-none focus:border-[#00639e]">
+                    </div>
+                </div>
+            </div>
+
+            <!-- VDF & Estanque -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                    <label class="text-[10px] text-slate-500 block font-bold mb-1">Tablero VDF / Control:</label>
+                    <input type="text" id="inpTablero" value="Danfoss FC-102 sin alarmas" class="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#00639e]">
+                </div>
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                    <label class="text-[10px] text-slate-500 block font-bold mb-1">Precarga Estanque:</label>
+                    <input type="text" id="inpEstanque" value="3.2 bar (Membrana OK)" class="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#00639e]">
+                </div>
+            </div>
+        </div>
+
+        <!-- Repuestos Utilizados -->
+        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-700">2. Repuestos de Bodega Sepúlveda Leyton</span>
+                <span class="text-[10px] font-mono-tech text-amber-800 font-bold bg-amber-50 px-2 py-0.5 rounded border border-amber-200">REBAJA DEFONTANA</span>
+            </div>
+            <div class="space-y-2 text-xs">
+                <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100 transition">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="chkPart1" checked class="w-4 h-4 rounded text-[#00639e] border-slate-300 focus:ring-[#00639e]">
+                        <span class="font-semibold text-slate-800" id="lblFormPart1">1x Sello Mecánico 1.5" Carburo</span>
+                    </div>
+                    <span class="font-mono-tech text-[#00639e] font-bold" id="lblFormPrice1">$38.500</span>
+                </label>
+                <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100 transition">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="chkPart2" checked class="w-4 h-4 rounded text-[#00639e] border-slate-300 focus:ring-[#00639e]">
+                        <span class="font-semibold text-slate-800" id="lblFormPart2">1x Presostato Danfoss KP35</span>
+                    </div>
+                    <span class="font-mono-tech text-[#00639e] font-bold" id="lblFormPrice2">$29.900</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Fotos -->
+        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-700">3. Registro Fotográfico</span>
+                <span class="text-[10px] font-mono-tech text-[#00639e] font-bold">2 FOTOS CON GPS</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <div class="text-[9px] font-mono-tech text-[#00639e] font-bold">FOTO ANTES</div>
+                    <div class="font-bold text-slate-900 text-xs mt-1" id="lblFormPhoto1">Goteo Sello Bomba 1</div>
+                    <div class="text-[9px] text-slate-500 mt-1 font-mono-tech">Subterráneo -3</div>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <div class="text-[9px] font-mono-tech text-emerald-700 font-bold">FOTO DESPUÉS</div>
+                    <div class="font-bold text-slate-900 text-xs mt-1" id="lblFormPhoto2">Manómetro 4.5 bar OK</div>
+                    <div class="text-[9px] text-slate-500 mt-1 font-mono-tech">Sistema Estable</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Firma Digital Touch del Mayordomo -->
+        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-700">4. Firma Recepción Conforme</span>
+                <div class="flex gap-2 text-[10px]">
+                    <button type="button" onclick="autoDrawFormSignature()" class="text-[#00639e] font-bold hover:underline">Simular Firma</button>
+                    <button type="button" onclick="clearFormSignature()" class="text-rose-600 font-bold hover:underline">Limpiar</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                    <label class="text-[10px] text-slate-500 block font-medium">Receptor en Edificio:</label>
+                    <input type="text" id="inpFormReceptor" value="Juan Carlos Muñoz" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-semibold text-slate-900 focus:outline-none focus:border-[#00639e]">
+                </div>
+                <div>
+                    <label class="text-[10px] text-slate-500 block font-medium">Cargo:</label>
+                    <input type="text" id="inpFormCargo" value="Mayordomo General" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-semibold text-slate-900 focus:outline-none focus:border-[#00639e]">
+                </div>
+            </div>
+
+            <div>
+                <label class="text-[10px] text-slate-500 block font-medium mb-1">Firma digital en pantalla:</label>
+                <div class="border border-slate-300 rounded-xl bg-slate-50 p-1">
+                    <canvas id="sigCanvas" width="400" height="90" class="w-full h-[90px] rounded-lg bg-white"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- =========================================================================
+         FIXED BOTTOM ACTION BAR (ONLY IN FORM VIEW)
+         ========================================================================= -->
+    <div id="formBottomBar" class="hidden fixed bottom-0 left-0 right-0 p-4 bg-white/95 border-t border-slate-200 backdrop-blur z-50 shadow-lg">
+        <div class="max-w-lg mx-auto">
+            <button id="btnFormSubmit" onclick="handleFormSubmission()" class="w-full py-4 px-6 rounded-2xl font-black text-sm uppercase tracking-wider text-white bg-gradient-to-r from-[#00639e] to-[#0284c7] hover:from-[#005282] hover:to-[#0274b0] shadow-lg shadow-sky-900/15 transition flex items-center justify-center gap-2">
+                <span id="btnSubmitIcon">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17 21 17 13 7 13 7 21" stroke-width="2"/>
+                        <polyline points="7 3 7 8 15 8" stroke-width="2"/>
+                    </svg>
+                </span>
+                <span id="btnSubmitText">Guardar OT en Memoria Local (Modo Subterráneo)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         FLOATING IN-APP TOAST (REPLACES BROWSER ALERTS)
+         ========================================================================= -->
+    <div id="appToast" class="hidden fixed top-4 left-4 right-4 z-[9999] p-4 rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-700 flex items-start gap-3 animate-fade-in max-w-md mx-auto">
+        <div id="toastIconSlot" class="shrink-0 mt-0.5">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
+        <div class="flex-grow min-w-0">
+            <h4 id="toastTitle" class="text-xs font-bold text-white">Notificación</h4>
+            <p id="toastMessage" class="text-[11px] text-slate-300 mt-0.5 leading-snug">Detalle del evento</p>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL SUCCESS
+         ========================================================================= -->
+    <div id="modalSuccess" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white border border-slate-200 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl space-y-4 animate-fade-in">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center text-3xl mx-auto shadow-sm">
+                <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="m9 12 2 2 4-4"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-black text-slate-900">¡Orden Sincronizada con Éxito!</h3>
+                <p class="text-xs text-slate-600 mt-1" id="modalDesc">
+                    Inyectada en Defontana ERP y Certificado PDF formal despachado al Administrador.
+                </p>
+            </div>
+            
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-left text-xs space-y-2 font-mono-tech">
+                <div class="text-emerald-700 flex items-center gap-1.5 font-bold">
+                    <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>Defontana: Orden Venta Creada</span>
+                </div>
+                <div class="text-emerald-700 flex items-center gap-1.5 font-bold">
+                    <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>Bodega Sepúlveda Leyton: Rebaja OK</span>
+                </div>
+                <div class="text-[#00639e] flex items-center gap-1.5 font-bold">
+                    <svg class="w-3.5 h-3.5 text-[#00639e] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>PDF Despachado al Administrador</span>
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-2">
+                <button onclick="openPdfCertificate()" class="w-full py-3.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00639e] to-[#0284c7] hover:from-[#005282] hover:to-[#0274b0] transition flex items-center justify-center gap-2 shadow-lg shadow-sky-900/15">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8" stroke-width="2"/>
+                    </svg>
+                    <span>Ver Certificado PDF en Pantalla</span>
+                </button>
+                <button onclick="sharePdfCertificate()" class="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-[#00639e] bg-sky-50 hover:bg-sky-100 border border-sky-200 transition flex items-center justify-center gap-2">
+                    <svg class="w-3.5 h-3.5 text-[#00639e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                    </svg>
+                    <span>Compartir Certificado PDF</span>
+                </button>
+                <button onclick="closeSuccessAndReturnToList()" class="w-full py-2 px-4 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800 transition">
+                    Volver a Mi Ruta
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL SHARE SHEET (OPCIONES DE COMPARTIR NATIVAS Y DIRECTAS)
+         ========================================================================= -->
+    <div id="modalShareSheet" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-3 sm:p-4 hidden animate-fade-in">
+        <div class="bg-white border border-slate-200 rounded-3xl p-5 max-w-sm w-full shadow-2xl space-y-4">
+            <!-- Header -->
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-sky-50 text-[#00639e] border border-sky-100 flex items-center justify-center shrink-0 shadow-sm">
+                        <svg class="w-5 h-5 text-[#00639e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-extrabold text-slate-900 leading-tight">Compartir Certificado PDF</h3>
+                        <p class="text-[11px] text-slate-500 font-mono-tech mt-0.5" id="shareSheetFolio">OT #CB-2026-0842 · Torre Los Leones</p>
+                    </div>
+                </div>
+                <button onclick="closeShareSheet()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Destinatario Identificado -->
+            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+                <div class="flex justify-between items-center text-slate-500 text-[10px]">
+                    <span class="font-bold uppercase tracking-wider">Receptor del Certificado:</span>
+                    <span class="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 font-mono-tech">TIMBRADO OK</span>
+                </div>
+                <div class="font-extrabold text-slate-900" id="shareSheetReceptor">Juan Carlos Muñoz (Mayordomo)</div>
+                <div class="text-[11px] text-slate-500 truncate font-mono-tech" id="shareSheetEmail">mayordomia.torrelosleones@gmail.com</div>
+            </div>
+
+            <!-- Opciones del Teléfono -->
+            <div class="space-y-2">
+                <!-- 1. Enviar por Correo (mailto) -->
+                <a id="btnShareMailto" href="#" class="w-full py-3 px-3.5 rounded-xl bg-[#00639e] hover:bg-[#005282] text-white text-xs font-bold flex items-center justify-between transition shadow-md shadow-sky-900/15 active:scale-95 group">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left truncate">
+                            <span class="block font-bold truncate">Enviar por Correo al Mayordomo</span>
+                            <span class="block text-[10px] text-sky-100 font-normal">Abre Gmail / App de correo del teléfono</span>
+                        </div>
+                    </div>
+                    <svg class="w-4 h-4 text-white/70 group-hover:translate-x-0.5 transition shrink-0 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+
+                <!-- 2. Enviar por WhatsApp -->
+                <a id="btnShareWhatsApp" href="#" target="_blank" class="w-full py-3 px-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-between transition shadow-md shadow-emerald-900/15 active:scale-95 group">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.456 5.711 1.458h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 00-3.48-8.413Z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left truncate">
+                            <span class="block font-bold truncate">Enviar por WhatsApp</span>
+                            <span class="block text-[10px] text-emerald-100 font-normal">Abre chat directo con mensaje oficial</span>
+                        </div>
+                    </div>
+                    <svg class="w-4 h-4 text-white/70 group-hover:translate-x-0.5 transition shrink-0 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+
+                <!-- 3. Menú Nativo del Teléfono (si existe navigator.share) -->
+                <button id="btnShareNativeDrawer" onclick="triggerNativeShare()" class="w-full py-2.5 px-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center justify-between transition border border-slate-200 active:scale-95">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-lg bg-slate-200 flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <span class="block font-bold">Más Opciones del Teléfono</span>
+                            <span class="block text-[10px] text-slate-500 font-normal">Menú del sistema (AirDrop, QuickShare, etc.)</span>
+                        </div>
+                    </div>
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+
+                <!-- 4. Copiar Enlace Directo -->
+                <button onclick="copyCertificateLink()" class="w-full py-2.5 px-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center justify-center gap-2 transition border border-slate-200 active:scale-95">
+                    <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    <span id="btnCopyLinkText">Copiar Enlace Web al Certificado</span>
+                </button>
+            </div>
+
+            <!-- Botón Cerrar -->
+            <button onclick="closeShareSheet()" class="w-full py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800 transition">
+                Cerrar
+            </button>
+        </div>
+    </div>
+
+
+
+
+    <!-- =========================================================================
+         CONTAINER VIEW 3: VISOR DE CERTIFICADO PDF EN PANTALLA MÓVIL
+         ========================================================================= -->
+    <div id="viewPdfViewer" class="hidden flex-grow overflow-y-auto smooth-scroll px-3 py-3 space-y-3 max-w-lg mx-auto w-full pb-20 animate-fade-in">
+        
+        <!-- PDF Navigation Top Bar -->
+        <div class="flex items-center justify-between pb-1 gap-2">
+            <button onclick="showOrderList()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-slate-50 text-[#00639e] transition flex items-center gap-1.5 border border-slate-200 shadow-sm active:scale-95">
+                <svg class="w-3.5 h-3.5 text-[#00639e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                <span>Volver</span>
+            </button>
+            
+            <div class="flex items-center gap-1.5">
+                <span class="text-[10px] font-mono-tech px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold hidden sm:flex items-center gap-1">
+                    <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    <span>Timbrado OK</span>
+                </span>
+                
+                <button onclick="sharePdfCertificate()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#00639e] hover:bg-[#005282] text-white transition flex items-center gap-1.5 shadow-sm active:scale-95">
+                    <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                    </svg>
+                    <span>Compartir</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- The PDF Document Sheet (A4 Responsive Container, 100% Mobile Adjusted) -->
+        <div class="bg-white rounded-2xl border border-slate-300 shadow-xl p-4 sm:p-5 text-slate-900 text-xs space-y-3.5 relative overflow-hidden">
+            
+            <!-- Watermark Background -->
+            <div class="absolute -right-8 -bottom-8 pointer-events-none opacity-[0.03]">
+                <img src="logo_centralbombas.png" alt="Watermark" class="w-64 h-auto">
+            </div>
+
+            <!-- Header: Real Logo + Formal Folio -->
+            <div class="border-b-2 border-slate-900 pb-3">
+                <div class="flex items-start justify-between gap-2">
+                    <img src="logo_centralbombas.png" alt="Central Bombas SpA" class="h-10 max-w-[145px] object-contain shrink-0">
+                    <div class="text-right">
+                        <span class="inline-block px-2 py-0.5 rounded bg-slate-100 font-mono-tech font-bold text-slate-900 border border-slate-300 text-[10px]" id="pdfFolioLabel">
+                            INFORME Nº CB-2026-0842
+                        </span>
+                        <div class="text-[9px] text-slate-500 mt-1 font-mono-tech" id="pdfDateLabel">
+                            03 Nov 2026 · 12:45 hrs
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 text-[9px] text-slate-500 font-medium">
+                    CENTRAL BOMBAS SpA · RUT 76.812.340-K · Sepúlveda Leyton 3068, Santiago
+                </div>
+            </div>
+
+            <!-- Client & Service Info Card -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1 text-[11px]">
+                <div class="flex justify-between items-start gap-2">
+                    <span class="text-slate-500 shrink-0">Edificio / Cliente:</span>
+                    <strong class="text-slate-900 font-black text-right" id="pdfBuildingName">Comunidad Edificio Torre Los Leones</strong>
+                </div>
+                <div class="flex justify-between items-start gap-2">
+                    <span class="text-slate-500 shrink-0">Dirección:</span>
+                    <span class="text-slate-700 text-right" id="pdfBuildingAddress">Av. Los Leones 1450, Providencia</span>
+                </div>
+                <div class="flex justify-between items-start gap-2">
+                    <span class="text-slate-500 shrink-0">Sistema:</span>
+                    <span class="text-slate-800 font-semibold text-right" id="pdfEquipment">Sala de Bombas Agua Potable</span>
+                </div>
+                <div class="flex justify-between items-start gap-2 pt-1 border-t border-slate-200 text-[10px]">
+                    <span class="text-slate-500 shrink-0">Cuadrilla Asignada:</span>
+                    <span class="text-[#00639e] font-bold text-right" id="pdfTechnician">Marcelo Gómez Valdés (Móvil #4)</span>
+                </div>
+            </div>
+
+            <!-- Section 1: Mediciones de Ingeniería Hidráulica -->
+            <div>
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-700">1. Mediciones Técnicas en Régimen</span>
+                    <span class="text-[9px] font-mono-tech text-emerald-800 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">TOLERANCIA OK</span>
+                </div>
+                
+                <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                    <table class="w-full text-left text-[10px]">
+                        <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                            <tr>
+                                <th class="p-1.5">Equipo</th>
+                                <th class="p-1.5 text-center">Voltaje</th>
+                                <th class="p-1.5 text-center">Amperaje</th>
+                                <th class="p-1.5 text-center">Presión</th>
+                                <th class="p-1.5 text-right">Resultado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-mono-tech">
+                            <tr>
+                                <td class="p-1.5 font-sans font-semibold text-slate-900">Bomba #1 (Principal)</td>
+                                <td class="p-1.5 text-center" id="pdfP1Volt">380 V</td>
+                                <td class="p-1.5 text-center text-[#00639e] font-bold" id="pdfP1Amp">7.2 A</td>
+                                <td class="p-1.5 text-center text-emerald-700 font-bold" id="pdfP1Press">4.5 bar</td>
+                                <td class="p-1.5 text-right font-sans font-bold text-emerald-700">CONFORME</td>
+                            </tr>
+                            <tr>
+                                <td class="p-1.5 font-sans font-semibold text-slate-900">Bomba #2 (Alternancia)</td>
+                                <td class="p-1.5 text-center" id="pdfP2Volt">380 V</td>
+                                <td class="p-1.5 text-center text-[#00639e] font-bold" id="pdfP2Amp">7.1 A</td>
+                                <td class="p-1.5 text-center text-emerald-700 font-bold" id="pdfP2Press">4.5 bar</td>
+                                <td class="p-1.5 text-right font-sans font-bold text-emerald-700">CONFORME</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-2 text-[10px]">
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                        <span class="text-slate-400 block text-[9px] uppercase font-bold">Tablero VDF:</span>
+                        <strong class="text-slate-800" id="pdfTablero">Danfoss FC-102 sin alarmas</strong>
+                    </div>
+                    <div class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                        <span class="text-slate-400 block text-[9px] uppercase font-bold">Precarga Estanque:</span>
+                        <strong class="text-slate-800" id="pdfEstanque">3.2 bar (Membrana OK)</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Repuestos de Bodega Sepúlveda Leyton -->
+            <div>
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-700">2. Repuestos Utilizados (Bodega Sepúlveda Leyton)</span>
+                    <span class="text-[9px] font-mono-tech text-amber-800 font-bold bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">REBAJA DEFONTANA</span>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5 text-[11px]" id="pdfPartsList">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Section 3: Registro Fotográfico GPS -->
+            <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-700 block mb-1.5">3. Evidencia Fotográfica en Terreno</span>
+                <div class="grid grid-cols-2 gap-2 text-[10px]">
+                    <div class="p-2 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[9px] font-mono-tech font-bold text-[#00639e] block">REGISTRO INICIAL (ANTES)</span>
+                        <strong class="text-slate-900 block mt-0.5 text-[11px]" id="pdfPhoto1">Goteo Sello Bomba 1</strong>
+                        <span class="text-[9px] text-slate-400 mt-1 block">Subterráneo -3 · GPS OK</span>
+                    </div>
+                    <div class="p-2 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[9px] font-mono-tech font-bold text-emerald-700 block">REGISTRO FINAL (DESPUÉS)</span>
+                        <strong class="text-slate-900 block mt-0.5 text-[11px]" id="pdfPhoto2">Manómetro 4.5 bar OK</strong>
+                        <span class="text-[9px] text-slate-400 mt-1 block">Régimen Automático OK</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Firmas -->
+            <div class="border-t border-slate-200 pt-3">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-700 block mb-2 text-center">4. Firmas de Conformidad del Servicio</span>
+                <div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                        <div class="h-11 flex items-center justify-center">
+                            <!-- Digital Tech Signature Path -->
+                            <svg class="h-8 w-auto text-[#00639e]" viewBox="0 0 200 60" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M15 45 C35 15, 60 20, 80 48 C95 15, 115 35, 135 25 C150 45, 170 20, 185 35"/>
+                                <line x1="10" y1="52" x2="190" y2="48"/>
+                            </svg>
+                        </div>
+                        <div class="border-t border-slate-300 pt-1 text-[10px] font-bold text-slate-900">Marcelo Gómez Valdés</div>
+                        <div class="text-[8px] text-slate-500 font-mono-tech">Técnico Central Bombas SpA</div>
+                    </div>
+
+                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                        <div class="h-11 flex items-center justify-center">
+                            <img id="pdfViewerSigImg" src="" alt="Firma Cliente" class="max-h-9 max-w-[120px] object-contain">
+                        </div>
+                        <div class="border-t border-slate-300 pt-1 text-[10px] font-bold text-slate-900" id="pdfViewerReceptorName">Juan Carlos Muñoz</div>
+                        <div class="text-[8px] text-slate-500 font-mono-tech" id="pdfViewerReceptorCargo">Mayordomo General · Conforme</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timbre de Seguridad Defontana -->
+            <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-center text-[9px] text-emerald-950 font-mono-tech">
+                <div class="font-bold flex items-center justify-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    <span>DOCUMENTO TIMBRADO & VERIFICADO EN LÍNEA · CENTRAL BOMBAS</span>
+                </div>
+                <div class="text-[8px] text-emerald-700 mt-0.5">Integrado con Defontana ERP · Sepúlveda Leyton 3068, Santiago</div>
+            </div>
+
+        </div>
+
+        <!-- Action Buttons (Enviar al Mayordomo & Volver) -->
+        <div class="space-y-2 pt-2 pb-6">
+            <button onclick="sharePdfCertificate()" class="w-full py-3.5 px-4 rounded-2xl font-black text-xs uppercase tracking-wider text-white bg-gradient-to-r from-[#00639e] to-[#0284c7] hover:from-[#005282] hover:to-[#0274b0] shadow-lg shadow-sky-900/15 transition flex items-center justify-center gap-2 active:scale-[0.99]">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                </svg>
+                <span>Compartir Certificado PDF</span>
+            </button>
+
+            <button onclick="showOrderList()" class="w-full py-3 px-4 rounded-2xl font-bold text-xs text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 transition flex items-center justify-center gap-2 active:scale-[0.99] shadow-sm">
+                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                <span>Volver a Mis Visitas</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- =========================================================================
+         JAVASCRIPT DATA & INTERACTION ENGINE
+         ========================================================================= -->
+    <script>
+        const techniciansData = {
+            marcelo: {
+                id: 'TEC-002',
+                name: 'Marcelo Gómez Valdés',
+                initials: 'MG',
+                role: 'Técnico Especialista Hidráulico',
+                crew: 'Cuadrilla Hidráulica #2 · Móvil #4 (KH-2984)',
+                vanPlate: 'Móvil #4 (KH-2984)',
+                orders: [
+                    {
+                        key: 'los_leones',
+                        id: 'CB-2026-0842',
+                        time: '10:30 hrs',
+                        statusBadge: 'EN CURSO',
+                        statusColor: 'cyan',
+                        name: 'Comunidad Edificio Torre Los Leones',
+                        address: 'Av. Los Leones 1450, Providencia',
+                        equipment: 'Sala de Bombas Agua Potable (3 Bombas KSB 5.5 HP + VDF)',
+                        contact: 'Juan Carlos Muñoz (Mayordomo)',
+                        email: 'mayordomia.torrelosleones@gmail.com',
+                        phone: '+56 9 8452 1190',
+                        v1: '380 V', a1: '7.2 A', p1: '4.5 bar',
+                        v2: '380 V', a2: '7.1 A', p2: '4.5 bar',
+                        tablero: 'Danfoss FC-102 sin alarmas',
+                        estanque: '3.2 bar (Membrana OK)',
+                        part1: '1x Sello Mecánico 1.5" Carburo', price1: '$38.500',
+                        part2: '1x Presostato Danfoss KP35', price2: '$29.900',
+                        photo1: 'Goteo Sello Bomba 1',
+                        photo2: 'Manómetro 4.5 bar OK',
+                        receptor: 'Juan Carlos Muñoz',
+                        cargo: 'Mayordomo General'
+                    },
+                    {
+                        key: 'nunoa',
+                        id: 'CB-2026-0843',
+                        time: '13:00 hrs',
+                        statusBadge: 'URGENCIA',
+                        statusColor: 'rose',
+                        name: 'Condominio Plaza Ñuñoa',
+                        address: 'Av. Irarrázaval 3600, Ñuñoa',
+                        equipment: 'Pozo Sentina & Aguas Lluvias (2 Bombas Sumergibles Zenit 3 HP)',
+                        contact: 'Margarita Soto (Administradora)',
+                        email: 'administracion@plazanunoa.cl',
+                        phone: '+56 9 7311 4452',
+                        v1: '380 V', a1: '5.8 A', p1: '2.8 bar',
+                        v2: '380 V', a2: '5.9 A', p2: '2.8 bar',
+                        tablero: 'Tablero Sentina con Alarma Acústica OK',
+                        estanque: 'Pozo Sentina Nivel Controlado',
+                        part1: '1x Flotador de Nivel Hermético 10m', price1: '$24.500',
+                        part2: '2x Horas Técnicas Urgencia Nocturna', price2: '$45.000',
+                        photo1: 'Flotador Atascado en Pozo',
+                        photo2: 'Sentina Operando en Vacío',
+                        receptor: 'Margarita Soto',
+                        cargo: 'Administradora de Edificio'
+                    },
+                    {
+                        key: 'capital',
+                        id: 'CB-2026-0844',
+                        time: '15:30 hrs',
+                        statusBadge: 'PROGRAMADA',
+                        statusColor: 'slate',
+                        name: 'Edificio Capital Santiago',
+                        address: 'Moneda 1040, Santiago Centro',
+                        equipment: 'Red Incendio 15 HP + Generador Cummins 120 kVA',
+                        contact: 'Patricio Alarcón (Comité)',
+                        email: 'comite.capital@gmail.com',
+                        phone: '+56 9 9234 8871',
+                        v1: '380 V', a1: '18.4 A', p1: '7.8 bar',
+                        v2: '380 V', a2: '18.2 A', p2: '7.8 bar',
+                        tablero: 'Tablero NFPA-20 Red Incendio OK',
+                        estanque: 'Estanque 45.000L al 100%',
+                        part1: '2x Filtro Petróleo Fleetguard', price1: '$52.000',
+                        part2: '1x Batería 12V 100Ah Libre Mantención', price2: '$98.000',
+                        photo1: 'Horómetro Generador 412 hrs',
+                        photo2: 'Válvula Red Húmeda Presurizada',
+                        receptor: 'Patricio Alarcón',
+                        cargo: 'Presidente Comité de Administración'
+                    }
+                ]
+            },
+            carlos: {
+                id: 'TEC-004',
+                name: 'Carlos Valenzuela Ríos',
+                initials: 'CV',
+                role: 'Técnico Especialista Climatización',
+                crew: 'Cuadrilla Térmica #1 · Móvil #2 (PJ-8831)',
+                vanPlate: 'Móvil #2 (PJ-8831)',
+                orders: [
+                    {
+                        key: 'las_condes',
+                        id: 'CB-2026-0845',
+                        time: '09:00 hrs',
+                        statusBadge: 'EN CURSO',
+                        statusColor: 'cyan',
+                        name: 'Edificio Corporativo Apoquindo',
+                        address: 'Av. Apoquindo 4500, Las Condes',
+                        equipment: 'Chiller Trane 80 TR + Bombas Recirculación Grundfos',
+                        contact: 'Rodrigo Fuentes (Jefe Mantención)',
+                        v1: '380 V', a1: '12.4 A', p1: '3.6 bar',
+                        v2: '380 V', a2: '12.1 A', p2: '3.6 bar',
+                        tablero: 'Tablero Fuerza y Control Chiller OK',
+                        estanque: 'Circuito Primario Cerrado 2.5 bar',
+                        part1: '1x Sensor Temperatura PT100', price1: '$42.000',
+                        part2: '1x Galón Glicol Inhibido', price2: '$35.000',
+                        photo1: 'Lectura Delta T Evaporador',
+                        photo2: 'Bombas en Alternancia OK',
+                        receptor: 'Rodrigo Fuentes',
+                        cargo: 'Jefe de Mantenimiento Corporativo'
+                    },
+                    {
+                        key: 'vitacura',
+                        id: 'CB-2026-0846',
+                        time: '12:00 hrs',
+                        statusBadge: 'PROGRAMADA',
+                        statusColor: 'slate',
+                        name: 'Residencial Bicentenario',
+                        address: 'Av. Vitacura 5200, Vitacura',
+                        equipment: 'Calderas Agua Caliente + 2 Bombas Rotor Húmedo Wilo',
+                        contact: 'Cecilia Moraga (Conserje Mayor)',
+                        v1: '220 V', a1: '3.4 A', p1: '2.2 bar',
+                        v2: '220 V', a2: '3.5 A', p2: '2.2 bar',
+                        tablero: 'Termostatos de Seguridad Operativos',
+                        estanque: 'Acumuladores ACS a 58°C',
+                        part1: '1x Válvula de Seguridad 6 bar', price1: '$28.000',
+                        part2: '2x Termomanómetro 0-10 bar', price2: '$19.000',
+                        photo1: 'Llama Caldera Combustión Limpia',
+                        photo2: 'Presión Circuito Sanitario',
+                        receptor: 'Cecilia Moraga',
+                        cargo: 'Conserje Principal'
+                    }
+                ]
+            },
+            patricio: {
+                id: 'TEC-007',
+                name: 'Patricio Soto Herrera',
+                initials: 'PS',
+                role: 'Técnico Electromecánico Senior',
+                crew: 'Cuadrilla Electromecánica · Móvil #6 (TL-4190)',
+                vanPlate: 'Móvil #6 (TL-4190)',
+                orders: [
+                    {
+                        key: 'san_miguel',
+                        id: 'CB-2026-0847',
+                        time: '11:00 hrs',
+                        statusBadge: 'URGENCIA',
+                        statusColor: 'rose',
+                        name: 'Condominio Gran Avenida',
+                        address: 'Gran Avenida 4800, San Miguel',
+                        equipment: 'Tablero General Fuerza con Falla Térmica en Guardamotor',
+                        contact: 'Luis Parra (Administrador)',
+                        v1: '380 V', a1: '9.8 A', p1: '4.2 bar',
+                        v2: '380 V', a2: '9.7 A', p2: '4.2 bar',
+                        tablero: 'Reemplazo Guardamotor Schneider 10-16A',
+                        estanque: 'Estanque Hidroneumático 500L OK',
+                        part1: '1x Guardamotor Schneider TeSys GV2ME16', price1: '$64.000',
+                        part2: '1x Contactor LC1D12 220V', price2: '$32.500',
+                        photo1: 'Guardamotor Quemado Retirado',
+                        photo2: 'Equipo Operando con Consumo Nominal',
+                        receptor: 'Luis Parra',
+                        cargo: 'Jefe de Operaciones'
+                    }
+                ]
+            }
+        };
+
+        const state = {
+            isOffline: false,
+            activeTechKey: 'marcelo',
+            hasMorningSynced: false,
+            activeOrderKey: null,
+            pendingSyncOrders: []
+        };
+
+        function getActiveOrder() {
+            const tech = techniciansData[state.activeTechKey];
+            if (!tech || !state.activeOrderKey) return null;
+            return tech.orders.find(o => o.key === state.activeOrderKey);
+        }
+
+        // Morning Defontana Sync Simulation
+        function startMorningDefontanaSync() {
+            const btn = document.getElementById('btnTriggerMorningSync');
+            const spin = document.getElementById('syncSpinIcon');
+            const txt = document.getElementById('btnSyncText');
+            const stepsBox = document.getElementById('syncProgressSteps');
+
+            btn.disabled = true;
+            spin.classList.add('animate-spin');
+            txt.textContent = 'Conectando con Defontana ERP...';
+            stepsBox.classList.remove('hidden');
+
+            const s1 = document.getElementById('syncStep1');
+            const s2 = document.getElementById('syncStep2');
+            const s3 = document.getElementById('syncStep3');
+
+            // Step 1
+            setTimeout(() => {
+                s1.className = 'text-[#00639e] font-bold flex items-center gap-2';
+                s1.innerHTML = '<span class="w-2 h-2 rounded-full bg-[#00639e]"></span><span>1. Conectado a api.defontana.com (200 OK)</span>';
+                s2.className = 'text-slate-600 font-semibold flex items-center gap-2';
+            }, 400);
+
+            // Step 2
+            setTimeout(() => {
+                const tech = techniciansData[state.activeTechKey];
+                s2.className = 'text-[#00639e] font-bold flex items-center gap-2';
+                s2.innerHTML = `<span class="w-2 h-2 rounded-full bg-[#00639e]"></span><span>2. Autenticada ${tech.crew}</span>`;
+                s3.className = 'text-slate-600 font-semibold flex items-center gap-2';
+            }, 900);
+
+            // Step 3
+            setTimeout(() => {
+                const tech = techniciansData[state.activeTechKey];
+                s3.className = 'text-emerald-700 font-bold flex items-center gap-2';
+                s3.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-600"></span><span>3. ${tech.orders.length} Órdenes descargadas en memoria local</span>`;
+            }, 1400);
+
+            // Completion
+            setTimeout(() => {
+                state.hasMorningSynced = true;
+                document.getElementById('boxMorningPending').classList.add('hidden');
+                document.getElementById('boxMorningSuccess').classList.remove('hidden');
+                renderOrderCards();
+                toggleSignalToBasement();
+            }, 1800);
+        }
+
+        function resetMorningSyncSimulation() {
+            state.hasMorningSynced = false;
+            state.pendingSyncOrders = [];
+            const tech = techniciansData[state.activeTechKey];
+            if (tech) {
+                tech.orders.forEach(o => o.syncState = 'pending_visit');
+            }
+            document.getElementById('boxMorningPending').classList.remove('hidden');
+            document.getElementById('boxMorningSuccess').classList.add('hidden');
+            document.getElementById('syncProgressSteps').classList.add('hidden');
+            document.getElementById('btnTriggerMorningSync').disabled = false;
+            document.getElementById('syncSpinIcon').classList.remove('animate-spin');
+            document.getElementById('btnSyncText').textContent = 'Sincronizar Ruta con Defontana ERP';
+
+            document.getElementById('syncStep1').className = 'text-slate-400 flex items-center gap-2';
+            document.getElementById('syncStep1').innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-300"></span><span>1. Conectando con api.defontana.com...</span>';
+            document.getElementById('syncStep2').className = 'text-slate-400 flex items-center gap-2';
+            document.getElementById('syncStep2').innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-300"></span><span>2. Autenticando Cuadrilla (Token OAuth2)...</span>';
+            document.getElementById('syncStep3').className = 'text-slate-400 flex items-center gap-2';
+            document.getElementById('syncStep3').innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-300"></span><span>3. Descargando OTs y pautas a memoria IndexedDB...</span>';
+
+            toggleSignalToSurface();
+        }
+
+        // Render Cards in View 1 (Light Theme with Real Offline Queue)
+        function renderOrderCards() {
+            const tech = techniciansData[state.activeTechKey];
+            const container = document.getElementById('ordersCardsContainer');
+            if (!container || !tech) return;
+
+            document.getElementById('lblOtCounter').textContent = `${tech.orders.length} Visitas`;
+            document.getElementById('lblAssignedDesc').innerHTML = `${tech.orders.length} Órdenes de trabajo descargadas en memoria local para <strong>${tech.name}</strong>. Listas para operar offline en subterráneos.`;
+
+            container.innerHTML = '';
+
+            // If there are pending sync orders, display a clear status banner
+            if (state.pendingSyncOrders && state.pendingSyncOrders.length > 0) {
+                const pendingBanner = `
+                    <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 flex items-center justify-between text-xs shadow-sm animate-fade-in mb-3">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping shrink-0"></span>
+                            <div>
+                                <span class="font-bold block">${state.pendingSyncOrders.length} OT guardada(s) en memoria interna del teléfono</span>
+                                <span class="text-[11px] text-amber-800">Esperando señal 4G de superficie para transmitir a Defontana ERP.</span>
+                            </div>
+                        </div>
+                        <button onclick="toggleSignal()" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-amber-600 hover:bg-amber-700 text-white transition shrink-0 shadow-sm">
+                            Simular 4G
+                        </button>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', pendingBanner);
+            }
+
+            tech.orders.forEach(ord => {
+                let badgeHtml = '';
+                let actionText = 'Abrir Pauta';
+                let actionColor = 'text-[#00639e]';
+
+                if (ord.syncState === 'saved_offline') {
+                    badgeHtml = `
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-300 flex items-center gap-1.5 shadow-sm">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                            <span>En Memoria (Pendiente 4G)</span>
+                        </span>
+                    `;
+                    actionText = 'Ver / Editar OT';
+                    actionColor = 'text-amber-800';
+                } else if (ord.syncState === 'synced_defontana') {
+                    badgeHtml = `
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 flex items-center gap-1.5 shadow-sm">
+                            <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            <span>Sincronizada con Defontana ERP</span>
+                        </span>
+                    `;
+                    actionText = 'Ver Respaldo PDF';
+                    actionColor = 'text-emerald-700';
+                } else {
+                    const badgeColorClass = ord.statusColor === 'rose'
+                        ? 'bg-rose-50 text-rose-700 border-rose-200'
+                        : (ord.statusColor === 'cyan' ? 'bg-sky-50 text-[#00639e] border-sky-200' : 'bg-slate-100 text-slate-700 border-slate-200');
+                    badgeHtml = `
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${badgeColorClass}">
+                            ${ord.statusBadge} (${ord.time})
+                        </span>
+                    `;
+                }
+
+                const cardBorder = ord.syncState === 'saved_offline' ? 'border-amber-300 bg-amber-50/20' : (ord.syncState === 'synced_defontana' ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-200 bg-white');
+
+                const cardHtml = `
+                    <div onclick="${ord.syncState === 'synced_defontana' ? `openPdfCertificate('${ord.key}')` : `openOrderForm('${ord.key}')`}" class="p-4 rounded-2xl ${cardBorder} hover:border-[#00639e] hover:shadow-md shadow-sm cursor-pointer active:scale-[0.99] transition space-y-2.5 relative overflow-hidden group">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="font-mono-tech font-bold text-[#00639e]">OT #${ord.id}</span>
+                            ${badgeHtml}
+                        </div>
+                        <div>
+                            <h2 class="text-base font-extrabold text-slate-900 group-hover:text-[#00639e] transition">
+                                ${ord.name}
+                            </h2>
+                            <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5">
+                                <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                </svg>
+                                <span>${ord.address}</span>
+                            </p>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs text-slate-700">
+                            <span class="text-[10px] uppercase font-bold text-slate-400 block">Sistema Asignado:</span>
+                            <span class="font-semibold text-slate-800">${ord.equipment}</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-1 text-xs">
+                            <span class="text-[11px] text-slate-500 font-medium">Receptor: ${ord.contact}</span>
+                            <span class="font-bold ${actionColor} flex items-center gap-1 group-hover:translate-x-0.5 transition">
+                                <span>${actionText}</span>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        }
+
+        // Switch Technician Profile
+        function switchTechnician(techKey) {
+            state.activeTechKey = techKey;
+            const tech = techniciansData[techKey];
+            if (!tech) return;
+
+            document.getElementById('techAvatarPill').textContent = tech.initials;
+            document.getElementById('techNameLabel').textContent = tech.name;
+            document.getElementById('techRoleLabel').textContent = tech.crew;
+            document.getElementById('pendingTechName').textContent = tech.name;
+
+            resetMorningSyncSimulation();
+            showOrderList();
+        }
+
+        // Navigation between Views
+        function showOrderList() {
+            document.getElementById('viewOrderList').classList.remove('hidden');
+            document.getElementById('viewOrderForm').classList.add('hidden');
+            const pdfView = document.getElementById('viewPdfViewer');
+            if (pdfView) pdfView.classList.add('hidden');
+            document.getElementById('formBottomBar').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openOrderForm(key) {
+            state.activeOrderKey = key;
+            const tech = techniciansData[state.activeTechKey];
+            const ord = tech.orders.find(o => o.key === key);
+            if (!ord) return;
+
+            document.getElementById('formTechInitials').textContent = tech.initials;
+            document.getElementById('formTechName').textContent = tech.name;
+            document.getElementById('formVanPlate').textContent = tech.vanPlate;
+
+            document.getElementById('formBreadcrumbOt').textContent = 'OT #' + ord.id;
+            document.getElementById('formHeaderOt').textContent = 'OT #' + ord.id;
+            document.getElementById('formBuildingTitle').textContent = ord.name;
+            document.getElementById('formBuildingAddress').textContent = ord.address;
+            document.getElementById('formEquipmentName').textContent = ord.equipment;
+
+            document.getElementById('inpV1').value = ord.v1;
+            document.getElementById('inpA1').value = ord.a1;
+            document.getElementById('inpP1').value = ord.p1;
+            document.getElementById('formBadgeP1').textContent = `${ord.v1} · ${ord.a1} · ${ord.p1}`;
+
+            document.getElementById('inpV2').value = ord.v2;
+            document.getElementById('inpA2').value = ord.a2;
+            document.getElementById('inpP2').value = ord.p2;
+            document.getElementById('formBadgeP2').textContent = `${ord.v2} · ${ord.a2} · ${ord.p2}`;
+
+            document.getElementById('inpTablero').value = ord.tablero;
+            document.getElementById('inpEstanque').value = ord.estanque;
+
+            document.getElementById('lblFormPart1').textContent = ord.part1;
+            document.getElementById('lblFormPrice1').textContent = ord.price1;
+            document.getElementById('lblFormPart2').textContent = ord.part2;
+            document.getElementById('lblFormPrice2').textContent = ord.price2;
+
+            document.getElementById('lblFormPhoto1').textContent = ord.photo1;
+            document.getElementById('lblFormPhoto2').textContent = ord.photo2;
+
+            document.getElementById('inpFormReceptor').value = ord.receptor;
+            document.getElementById('inpFormCargo').value = ord.cargo;
+
+            document.getElementById('viewOrderList').classList.add('hidden');
+            document.getElementById('viewOrderForm').classList.remove('hidden');
+            document.getElementById('formBottomBar').classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(autoDrawFormSignature, 150);
+        }
+
+        // Signal Simulation Utilities
+        function toggleSignalToBasement() {
+            state.isOffline = true;
+            updateSignalUI();
+        }
+
+        function toggleSignalToSurface() {
+            state.isOffline = false;
+            updateSignalUI();
+        }
+
+        function toggleSignal() {
+            state.isOffline = !state.isOffline;
+            updateSignalUI();
+
+            // When user / tech ascends to surface (Online) and there are pending orders in queue:
+            if (!state.isOffline && state.pendingSyncOrders && state.pendingSyncOrders.length > 0) {
+                triggerAutomaticSurfaceSync();
+            }
+        }
+
+        function triggerAutomaticSurfaceSync() {
+            showInAppToast(
+                '📶 Señal 4G de Superficie Recuperada',
+                `Conexión detectada. Transmitiendo automáticamente ${state.pendingSyncOrders.length} orden(es) en cola a api.defontana.com...`,
+                false
+            );
+
+            setTimeout(() => {
+                const tech = techniciansData[state.activeTechKey];
+                state.pendingSyncOrders.forEach(key => {
+                    const o = tech.orders.find(ord => ord.key === key);
+                    if (o) o.syncState = 'synced_defontana';
+                });
+                state.pendingSyncOrders = [];
+                renderOrderCards();
+                document.getElementById('modalSuccess').classList.remove('hidden');
+            }, 1400);
+        }
+
+        function updateSignalUI() {
+            const btn = document.getElementById('btnSignalToggle');
+            const lbl = document.getElementById('lblSignalStatus');
+            const iconSlot = document.getElementById('signalIconSlot');
+            const dot = document.getElementById('signalDot');
+            const banner = document.getElementById('formSignalBanner');
+            const btnText = document.getElementById('btnSubmitText');
+            const btnIcon = document.getElementById('btnSubmitIcon');
+
+            if (state.isOffline) {
+                btn.className = 'px-2 py-0.5 rounded font-bold transition flex items-center gap-1.5 bg-rose-50 text-rose-700 border border-rose-200';
+                dot.className = 'w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping';
+                lbl.textContent = 'Subterráneo -3 (Offline)';
+                iconSlot.innerHTML = `
+                    <svg class="w-3 h-3 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                `;
+                if (banner) {
+                    banner.className = 'p-3 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-2.5 text-xs text-amber-900 shadow-sm';
+                    banner.innerHTML = `
+                        <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                            <line x1="12" x2="12" y1="9" y2="13" stroke-width="2"/>
+                            <line x1="12" x2="12.01" y1="17" stroke-width="2"/>
+                        </svg>
+                        <div><strong class="font-bold text-amber-900">Subterráneo -3 (Offline):</strong> Mediciones, repuestos y firma se guardan de forma segura en este teléfono. Al subir a la calle se sincronizarán solas con Defontana.</div>
+                    `;
+                }
+                if (btnText) btnText.textContent = 'Guardar OT en Memoria Local (Modo Subterráneo)';
+                if (btnIcon) {
+                    btnIcon.innerHTML = `
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                            <polyline points="17 21 17 13 7 13 7 21" stroke-width="2"/>
+                            <polyline points="7 3 7 8 15 8" stroke-width="2"/>
+                        </svg>
+                    `;
+                }
+            } else {
+                btn.className = 'px-2 py-0.5 rounded font-bold transition flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200';
+                dot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping';
+                lbl.textContent = 'Superficie 4G (Online)';
+                iconSlot.innerHTML = `
+                    <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 20V4"/>
+                    </svg>
+                `;
+                if (banner) {
+                    banner.className = 'p-3 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-start gap-2.5 text-xs text-emerald-900 shadow-sm';
+                    banner.innerHTML = `
+                        <svg class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <div><strong class="font-bold text-emerald-900">Superficie 4G Conectada:</strong> Al guardar la orden se transmitirá inmediatamente a api.defontana.com y se generará el certificado PDF formal.</div>
+                    `;
+                }
+                if (btnText) btnText.textContent = 'Finalizar & Enviar a Defontana ERP';
+                if (btnIcon) {
+                    btnIcon.innerHTML = `
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                        </svg>
+                    `;
+                }
+            }
+        }
+
+        // In-App Toast Notification
+        function showInAppToast(title, message, isWarning = false) {
+            const toast = document.getElementById('appToast');
+            const titleEl = document.getElementById('toastTitle');
+            const msgEl = document.getElementById('toastMessage');
+            const iconSlot = document.getElementById('toastIconSlot');
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+
+            if (isWarning) {
+                iconSlot.innerHTML = `
+                    <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                `;
+            } else {
+                iconSlot.innerHTML = `
+                    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                    </svg>
+                `;
+            }
+
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3500);
+        }
+
+        // Form Submission handler (True Offline-First Persistence)
+        function handleFormSubmission() {
+            const btn = document.getElementById('btnFormSubmit');
+            const txt = document.getElementById('btnSubmitText');
+            const ord = getActiveOrder();
+            btn.disabled = true;
+
+            if (state.isOffline) {
+                // EN SUBTERRÁNEO: GUARDA EN MEMORIA LOCAL Y MANTIENE EL ESTADO OFFLINE
+                txt.textContent = 'Guardando en Memoria IndexedDB...';
+                setTimeout(() => {
+                    btn.disabled = false;
+                    txt.textContent = 'Guardar OT en Memoria Local (Modo Subterráneo)';
+                    if (ord) {
+                        ord.syncState = 'saved_offline';
+                        if (!state.pendingSyncOrders.includes(ord.key)) {
+                            state.pendingSyncOrders.push(ord.key);
+                        }
+                    }
+                    showInAppToast(
+                        '✓ OT Guardada en Memoria Interna',
+                        'Almacenada con firma y repuestos en el teléfono. En cola para subir automáticamente a Defontana al recuperar señal 4G.',
+                        false
+                    );
+                    // Regresa a la lista de visitas para que el técnico vea su orden en cola sin alterar el modo offline
+                    setTimeout(() => {
+                        showOrderList();
+                        renderOrderCards();
+                    }, 500);
+                }, 600);
+            } else {
+                // EN SUPERFICIE (ONLINE): TRANSMITE DIRECTO
+                txt.textContent = 'Transmitiendo a api.defontana.com...';
+                setTimeout(() => {
+                    btn.disabled = false;
+                    txt.textContent = 'Finalizar & Enviar a Defontana ERP';
+                    if (ord) {
+                        ord.syncState = 'synced_defontana';
+                        state.pendingSyncOrders = state.pendingSyncOrders.filter(k => k !== ord.key);
+                    }
+                    renderOrderCards();
+                    document.getElementById('modalSuccess').classList.remove('hidden');
+                }, 900);
+            }
+        }
+
+
+        // Open PDF Certificate directly on phone screen (Mobile Fitted)
+        function openPdfCertificate(key) {
+            const tech = techniciansData[state.activeTechKey];
+            const targetKey = key || state.activeOrderKey || (tech.orders[0] ? tech.orders[0].key : 'los_leones');
+            const ord = tech.orders.find(o => o.key === targetKey);
+            if (!ord) return;
+
+            state.activeOrderKey = ord.key;
+
+            document.getElementById('pdfFolioLabel').textContent = 'INFORME Nº ' + ord.id;
+            document.getElementById('pdfDateLabel').textContent = new Date().toLocaleDateString('es-CL', { day: '2-digit', month: 'short', year: 'numeric' }) + ' · ' + ord.time;
+            document.getElementById('pdfBuildingName').textContent = ord.name;
+            document.getElementById('pdfBuildingAddress').textContent = ord.address;
+            document.getElementById('pdfEquipment').textContent = ord.equipment;
+            document.getElementById('pdfTechnician').textContent = tech.name + ' (' + tech.vanPlate + ')';
+
+            document.getElementById('pdfP1Volt').textContent = ord.v1;
+            document.getElementById('pdfP1Amp').textContent = ord.a1;
+            document.getElementById('pdfP1Press').textContent = ord.p1;
+
+            document.getElementById('pdfP2Volt').textContent = ord.v2;
+            document.getElementById('pdfP2Amp').textContent = ord.a2;
+            document.getElementById('pdfP2Press').textContent = ord.p2;
+
+            document.getElementById('pdfTablero').textContent = ord.tablero;
+            document.getElementById('pdfEstanque').textContent = ord.estanque;
+
+            document.getElementById('pdfPartsList').innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="font-medium text-slate-800">${ord.part1}</span>
+                    <span class="font-mono-tech font-bold text-[#00639e]">${ord.price1}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="font-medium text-slate-800">${ord.part2}</span>
+                    <span class="font-mono-tech font-bold text-[#00639e]">${ord.price2}</span>
+                </div>
+            `;
+
+            document.getElementById('pdfPhoto1').textContent = ord.photo1;
+            document.getElementById('pdfPhoto2').textContent = ord.photo2;
+
+            document.getElementById('pdfViewerReceptorName').textContent = ord.receptor;
+            document.getElementById('pdfViewerReceptorCargo').textContent = ord.cargo + ' · Conforme';
+
+            // Transfer canvas signature to image
+            const canvas = document.getElementById('sigCanvas');
+            const sigImg = document.getElementById('pdfViewerSigImg');
+            if (canvas && sigImg) {
+                sigImg.src = canvas.toDataURL();
+            }
+
+            // Hide other views and show PDF viewer adjusted to phone
+            document.getElementById('viewOrderList').classList.add('hidden');
+            document.getElementById('viewOrderForm').classList.add('hidden');
+            document.getElementById('formBottomBar').classList.add('hidden');
+            document.getElementById('modalSuccess').classList.add('hidden');
+            document.getElementById('viewPdfViewer').classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        
+        // Native Mobile & Direct Share Sheet for Certificate PDF
+        function sharePdfCertificate(key) {
+            const tech = techniciansData[state.activeTechKey];
+            const targetKey = key || state.activeOrderKey || (tech.orders[0] ? tech.orders[0].key : 'los_leones');
+            const ord = tech.orders.find(o => o.key === targetKey);
+            if (!ord) return;
+
+            state.activeOrderKey = ord.key;
+
+            // Close modalSuccess if open so it doesn't block the screen
+            const modalSuccess = document.getElementById('modalSuccess');
+            if (modalSuccess) modalSuccess.classList.add('hidden');
+
+            // Populate sheet fields
+            document.getElementById('shareSheetFolio').textContent = `OT #${ord.id} · ${ord.name}`;
+            document.getElementById('shareSheetReceptor').textContent = `${ord.receptor} (${ord.cargo})`;
+            document.getElementById('shareSheetEmail').textContent = ord.email || 'mayordomia.torrelosleones@gmail.com';
+
+            const certUrl = window.location.href;
+
+            // Setup Mailto
+            const mailSubject = encodeURIComponent(`Certificado de Mantenimiento Sala de Bombas - OT #${ord.id} - Central Bombas SpA`);
+            const mailBody = encodeURIComponent(
+                `Estimado(a) ${ord.receptor} (${ord.cargo}):
+
+` +
+                `Adjunto la información correspondiente al Certificado Oficial de Mantenimiento Técnico de la Sala de Bombas (OT #${ord.id}) realizado hoy en ${ord.name} (${ord.address}) por la cuadrilla de Central Bombas SpA.
+
+` +
+                `El servicio cuenta con todas las mediciones hidráulicas y eléctricas en régimen conforme, así como la firma de conformidad registrada.
+
+` +
+                `Puede consultar y descargar el certificado digital timbrado en el siguiente enlace:
+${certUrl}
+
+` +
+                `Atentamente,
+` +
+                `Central Bombas SpA
+` +
+                `Sepúlveda Leyton 3068, Santiago
+` +
+                `Mesa Central: +56 9 7426 3408 | contacto@centralbombas.cl`
+            );
+            const mailtoLink = `mailto:${ord.email || 'mayordomia.torrelosleones@gmail.com'}?cc=gerencia@centralbombas.cl&subject=${mailSubject}&body=${mailBody}`;
+            document.getElementById('btnShareMailto').href = mailtoLink;
+
+            // Setup WhatsApp
+            const waMessage = encodeURIComponent(
+                `Hola ${ord.receptor}, le comparto el Certificado Oficial de Mantenimiento Sala de Bombas (OT #${ord.id}) de Central Bombas SpA para ${ord.name}.
+
+` +
+                `Mediciones y firma conformes. Ver copia timbrada en línea:
+${certUrl}`
+            );
+            const waPhone = ord.phone ? ord.phone.replace(/[^0-9]/g, '') : '';
+            const waLink = `https://wa.me/${waPhone}?text=${waMessage}`;
+            document.getElementById('btnShareWhatsApp').href = waLink;
+
+            // Show or hide native drawer button based on support
+            const nativeBtn = document.getElementById('btnShareNativeDrawer');
+            if (nativeBtn) {
+                if (navigator.share) {
+                    nativeBtn.classList.remove('hidden');
+                } else {
+                    nativeBtn.classList.add('hidden');
+                }
+            }
+
+            // Open the share sheet
+            document.getElementById('modalShareSheet').classList.remove('hidden');
+        }
+
+        function closeShareSheet() {
+            document.getElementById('modalShareSheet').classList.add('hidden');
+        }
+
+        function triggerNativeShare() {
+            const tech = techniciansData[state.activeTechKey];
+            const ord = tech.orders.find(o => o.key === state.activeOrderKey) || tech.orders[0];
+            if (navigator.share) {
+                navigator.share({
+                    title: `Certificado Central Bombas - OT #${ord.id}`,
+                    text: `Certificado de Mantenimiento Sala de Bombas - ${ord.name} (OT #${ord.id}) · Central Bombas SpA`,
+                    url: window.location.href
+                }).catch(() => {});
+            }
+        }
+
+        function copyCertificateLink() {
+            const certUrl = window.location.href;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(certUrl);
+            }
+            const btnText = document.getElementById('btnCopyLinkText');
+            if (btnText) {
+                const original = btnText.textContent;
+                btnText.textContent = '✓ ¡Enlace Copiado al Portapapeles!';
+                setTimeout(() => {
+                    btnText.textContent = original;
+                }, 2000);
+            }
+            showInAppToast(
+                '✓ Enlace Copiado',
+                'El enlace al certificado oficial fue copiado al portapapeles.',
+                false
+            );
+        }
+
+        function closeSuccessAndReturnToList() {
+            document.getElementById('modalSuccess').classList.add('hidden');
+            showOrderList();
+        }
+
+        // Signature Canvas
+        const canvas = document.getElementById('sigCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: (clientX - rect.left) * (canvas.width / rect.width),
+                y: (clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const pos = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+            e.preventDefault();
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.strokeStyle = '#0f172a'; // Deep slate ink
+            ctx.lineWidth = 2.4;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            e.preventDefault();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('touchstart', startDrawing, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function clearFormSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function autoDrawFormSignature() {
+            clearFormSignature();
+            ctx.beginPath();
+            ctx.strokeStyle = '#00639e'; // Central Bombas Brand Ink
+            ctx.lineWidth = 2.4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            // Natural signature strokes
+            ctx.moveTo(40, 55);
+            ctx.bezierCurveTo(60, 20, 80, 25, 95, 60);
+            ctx.bezierCurveTo(110, 80, 130, 25, 150, 45);
+            ctx.bezierCurveTo(170, 65, 185, 30, 200, 50);
+            ctx.bezierCurveTo(220, 70, 240, 40, 270, 45);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(35, 65);
+            ctx.lineTo(290, 60);
+            ctx.stroke();
+        }
+
+        // Live Clock
+        setInterval(() => {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }) + ' hrs';
+            const clockEl = document.getElementById('topLiveClock');
+            if (clockEl) clockEl.textContent = timeStr;
+        }, 1000);
+
+        // Initial setup
+        window.addEventListener('DOMContentLoaded', () => {
+            switchTechnician('marcelo');
+        });
+    </script>
+</body>
+</html>
